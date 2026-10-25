@@ -38,6 +38,13 @@
 #define _MKSTR(m_x) _STR(m_x)
 #endif
 
+// [H5 FORK] Product directory name used for user config/cache/data paths.
+// Purpose: keep this fork's editor settings and user data SEPARATE from an
+// official Godot installation on the same machine (task E03).
+// Consumed by OS::get_godot_dir_name() in core/os/os.cpp.
+// See docs/E01-editor-entrypoints.md section 3.
+#define GODOT_H5_PRODUCT_DIR_NAME "GodotH5"
+
 // Godot versions are of the form <major>.<minor> for the initial release,
 // and then <major>.<minor>.<patch> for subsequent bugfix releases where <patch> != 0
 // That's arbitrary, but we find it pretty and it's the current policy.

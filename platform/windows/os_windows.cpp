@@ -2464,7 +2464,13 @@ String OS_Windows::get_temp_path() const {
 
 // Get properly capitalized engine name for system paths
 String OS_Windows::get_godot_dir_name() const {
-	return String(GODOT_VERSION_SHORT_NAME).capitalize();
+	// [H5 FORK] Product-specific directory name (task E03).
+	// This override is the one that actually runs on Windows: patching only the
+	// base OS::get_godot_dir_name() would have no effect here. Without this,
+	// the fork would share %APPDATA%/Godot and %LOCALAPPDATA%/Godot with an
+	// official Godot installation on the same machine.
+	// See docs/E01-editor-entrypoints.md section 3.
+	return String(GODOT_H5_PRODUCT_DIR_NAME);
 }
 
 String OS_Windows::get_system_dir(SystemDir p_dir, bool p_shared_storage) const {

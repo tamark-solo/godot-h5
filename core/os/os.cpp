@@ -292,8 +292,14 @@ String OS::get_safe_dir_name(const String &p_dir_name, bool p_allow_paths) const
 
 // Get properly capitalized engine name for system paths
 String OS::get_godot_dir_name() const {
-	// Default to lowercase, so only override when different case is needed
-	return String(GODOT_VERSION_SHORT_NAME).to_lower();
+	// [H5 FORK] Return a product-specific directory name instead of "godot".
+	// Rationale (task E03): with the upstream name, this fork would read and
+	// write %APPDATA%/Godot/... and %LOCALAPPDATA%/Godot/..., clobbering the
+	// settings, editor layout and user data of an official Godot install.
+	// Changing only this function relocates config, cache and user data
+	// together, without touching the project/scene file formats.
+	// See docs/E01-editor-entrypoints.md section 3.
+	return String(GODOT_H5_PRODUCT_DIR_NAME);
 }
 
 // OS equivalent of XDG_DATA_HOME
