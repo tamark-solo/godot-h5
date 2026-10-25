@@ -100,6 +100,12 @@ private:
 
 	CheckBox *edit_check_box = nullptr;
 
+	// [H5 FORK] Task E04 — "Create H5 Project" option (MODE_NEW only).
+	// When checked, the bundled H5 template is copied into the new project
+	// right after project.godot is written, so the project opens with the H5
+	// addon, config, export preset and shell already active.
+	CheckBox *h5_project_check = nullptr;
+
 	EditorFileDialog *fdialog_project = nullptr;
 	EditorFileDialog *fdialog_install = nullptr;
 	AcceptDialog *dialog_error = nullptr;
@@ -144,6 +150,11 @@ private:
 	void _reset_name();
 	void _renderer_selected();
 	void _nonempty_confirmation_ok_pressed();
+
+	// [H5 FORK] Task E04/E05 — copy the bundled H5 template into a new project.
+	// Returns OK on success (or when the template dir is absent, which is not
+	// fatal for a plain Godot project); on failure the caller shows an error.
+	Error _install_h5_template(const String &p_path);
 
 	void ok_pressed() override;
 

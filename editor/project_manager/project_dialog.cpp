@@ -486,6 +486,92 @@ void ProjectDialog::_install_path_selected(const String &p_path) {
 	get_ok_button()->grab_focus();
 }
 
+// [H5 FORK] Task E04/E05 — copy the bundled H5 template into a new project.
+//
+// Template location policy (see docs/E01-editor-entrypoints.md section 1):
+//   <dir of the editor executable>/h5_template
+// It is deliberately NOT a developer machine path and NOT a global Godot
+// install path, so a portable package works on a clean Windows machine.
+//
+// A missing template directory is an error only when the user explicitly asked
+// for an H5 project; a plain Godot project is unaffected.
+Error ProjectDialog::_install_h5_template(const String &p_path) {
+	String exe_dir = OS::get_singleton()->get_executable_path().get_base_dir();
+	String template_dir = exe_dir.path_join("h5_template");
+
+	if (!DirAccess::dir_exists_absolute(template_dir)) {
+		ERR_PRINT(vformat("[H5] Template directory not found: '%s'.", template_dir));
+		return ERR_FILE_NOT_FOUND;
+	}
+
+	// Recursive copy of the template tree into the new project directory.
+	Vector<String> pending;
+	pending.push_back(template_dir);
+
+	while (!pending.is_empty()) {
+		String current = pending[pending.size() - 1];
+		pending.remove_at(pending.size() - 1);
+
+		Ref<DirAccess> src = DirAccess::open(current);
+		if (src.is_null()) {
+			ERR_PRINT(vformat("[H5] Cannot open template directory: '%s'.", current));
+			return ERR_CANT_OPEN;
+		}
+
+		src->list_dir_begin();
+		String entry = src->get_next();
+		while (!entry.is_empty()) {
+			if (entry != "." && entry != "..") {
+				String src_path = current.path_join(entry);
+				// Preserve the relative layout below the template root.
+				String rel = src_path.substr(template_dir.length()).trim_prefix("/");
+				String dst_path = p_path.path_join(rel);
+
+				if (src->current_is_dir()) {
+					Error mk = DirAccess::make_dir_recursive_absolute(dst_path);
+					if (mk != OK) {
+						ERR_PRINT(vformat("[H5] Cannot create directory '%s'.", dst_path));
+						return mk;
+					}
+					pending.push_back(src_path);
+				} else {
+					Error cp = src->copy(src_path, dst_path);
+					if (cp != OK) {
+						ERR_PRINT(vformat("[H5] Cannot copy '%s' to '%s'.", src_path, dst_path));
+						return cp;
+					}
+				}
+			}
+			entry = src->get_next();
+		}
+		src->list_dir_end();
+	}
+
+	// The template ships its own project.godot with H5 defaults (input actions,
+	// display/stretch settings, autoload, Compatibility renderer). It was just
+	// copied over the one this dialog wrote, so restore the user's project name
+	// and keep the renderer the user picked.
+	String project_file = p_path.path_join("project.godot");
+	if (FileAccess::exists(project_file)) {
+		Ref<ConfigFile> cf;
+		cf.instantiate();
+		if (cf->load(project_file) == OK) {
+			cf->set_value("application", "config/name", project_name->get_text().strip_edges());
+			Error save_err = cf->save(project_file);
+			if (save_err != OK) {
+				ERR_PRINT(vformat("[H5] Could not restore project name in '%s'.", project_file));
+				return save_err;
+			}
+		} else {
+			ERR_PRINT(vformat("[H5] Could not read '%s' after copying the template.", project_file));
+			return ERR_FILE_CANT_READ;
+		}
+	}
+
+	print_verbose(vformat("[H5] Installed H5 template from '%s' into '%s'.", template_dir, p_path));
+	return OK;
+}
+
 void ProjectDialog::_reset_name() {
 	project_name->set_text(TTR("New Game Project"));
 }
@@ -605,6 +691,18 @@ void ProjectDialog::ok_pressed() {
 		if (err != OK) {
 			_set_message(TTRC("Couldn't create project.godot in project path."), MESSAGE_ERROR);
 			return;
+		}
+
+		// [H5 FORK] Task E04/E05 — lay down the H5 template.
+		// Done right after project.godot exists and BEFORE icon/VCS/editorconfig,
+		// so the template can override project.godot settings if needed and the
+		// remaining default files still apply.
+		if (h5_project_check != nullptr && h5_project_check->is_pressed()) {
+			Error h5_err = _install_h5_template(path);
+			if (h5_err != OK) {
+				_set_message(TTRC("Couldn't install the H5 project template. Check that the H5 template folder ships next to the editor executable."), MESSAGE_ERROR);
+				return;
+			}
 		}
 
 		// Store default project icon in SVG format.
@@ -941,6 +1039,7 @@ void ProjectDialog::show_dialog(bool p_reset_name, bool p_is_confirmed) {
 			install_path_container->hide();
 			renderer_container->show();
 			default_files_container->show();
+			h5_project_check->show(); // [H5 FORK] E04
 
 			callable_mp((Control *)project_name, &Control::grab_focus).call_deferred(false);
 			callable_mp(project_name, &LineEdit::select_all).call_deferred();
@@ -954,6 +1053,7 @@ void ProjectDialog::show_dialog(bool p_reset_name, bool p_is_confirmed) {
 			install_path_container->hide();
 			renderer_container->hide();
 			default_files_container->hide();
+			h5_project_check->hide(); // [H5 FORK] E04
 
 			callable_mp((Control *)project_path, &Control::grab_focus).call_deferred(false);
 		} else if (mode == MODE_DUPLICATE) {
@@ -964,6 +1064,7 @@ void ProjectDialog::show_dialog(bool p_reset_name, bool p_is_confirmed) {
 			install_path_container->hide();
 			renderer_container->hide();
 			default_files_container->hide();
+			h5_project_check->hide(); // [H5 FORK] E04
 			if (!duplicate_can_edit) {
 				edit_check_box->hide();
 			}
@@ -1217,6 +1318,14 @@ ProjectDialog::ProjectDialog() {
 	fdialog_install = memnew(EditorFileDialog);
 	fdialog_install->set_access(EditorFileDialog::ACCESS_FILESYSTEM);
 	add_child(fdialog_install);
+
+	// [H5 FORK] Task E04 — H5 project option.
+	h5_project_check = memnew(CheckBox);
+	h5_project_check->set_text(TTRC("Create H5 Project (Web export ready)"));
+	h5_project_check->set_tooltip_text(TTRC("Copies the bundled H5 template (addon, H5 config, Web export preset and custom HTML shell) into the new project."));
+	h5_project_check->set_pressed(true);
+	h5_project_check->set_h_size_flags(Control::SIZE_SHRINK_CENTER);
+	vb->add_child(h5_project_check);
 
 	Control *spacer2 = memnew(Control);
 	spacer2->set_v_size_flags(Control::SIZE_EXPAND_FILL);

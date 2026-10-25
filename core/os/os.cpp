@@ -35,6 +35,7 @@
 #include "core/io/file_access.h"
 #include "core/io/json.h"
 #include "core/os/midi_driver.h"
+#include "core/version.h" // [H5 FORK] for GODOT_H5_PRODUCT_DIR_NAME (task E03)
 #include "core/version_generated.gen.h"
 
 #include <cstdarg>

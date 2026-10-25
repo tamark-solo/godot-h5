@@ -40,6 +40,7 @@
 #include "core/debugger/script_debugger.h"
 #include "core/os/main_loop.h"
 #include "core/profiling/profiling.h"
+#include "core/version.h" // [H5 FORK] for GODOT_H5_PRODUCT_DIR_NAME (task E03)
 #include "core/version_generated.gen.h"
 #include "drivers/windows/dir_access_windows.h"
 #include "drivers/windows/file_access_windows.h"
