@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="H5Config" format=3 uid="uid://bsy78rn73e2ih"]
+
+[ext_resource type="Script" uid="uid://fhwfa0aetnsb" path="res://addons/h5/h5_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+game_title = "Hứng Sao"
+design_resolution = Vector2i(720, 1)
+require_actions = PackedStringArray("ui_accept", "ui_cancel")

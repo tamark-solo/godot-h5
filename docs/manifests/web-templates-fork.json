@@ -1,0 +1,42 @@
+﻿{
+    "manifestVersion":  1,
+    "label":  "fork",
+    "generatedAt":  "2026-10-26T07:33:33.7725060+07:00",
+    "source":  {
+                   "upstreamSha":  "e6a2176fb565c6fb098825e35c29010dc28a788d",
+                   "branch":  "indie/h5-platform",
+                   "dirtyFiles":  0,
+                   "engineDir":  "engine\\godot-h5"
+               },
+    "profile":  {
+                    "platform":  "web",
+                    "arch":  "wasm32",
+                    "threads":  "no",
+                    "dlinkEnabled":  "no",
+                    "renderer":  "gl_compatibility",
+                    "wasmSimd":  "yes",
+                    "texturePolicyDesktop":  "vram_compressed",
+                    "texturePolicyMobile":  "lossless"
+                },
+    "shell":  {
+                  "version":  "1.2.0",
+                  "path":  "tools\\shell\\h5-shell.html",
+                  "sha256":  "75E733F1D8C8D2EAB5D8D14056D32DE3C453767AB87827A7F5BD2D10E5E4F35F"
+              },
+    "templates":  {
+                      "debug":  {
+                                    "file":  "godot.web.template_debug.wasm32.nothreads.zip",
+                                    "path":  "C:\\Users\\Mark-TA\\Desktop\\AppGame\\builds\\web-debug-fork\\godot.web.template_debug.wasm32.nothreads.zip",
+                                    "bytes":  9760667,
+                                    "sha256":  "801427C85DC920DC0369D150E11E7A2144293169114E934F23BC0903849AC113",
+                                    "flavor":  "debug"
+                                },
+                      "release":  {
+                                      "file":  "godot.web.template_release.wasm32.nothreads.zip",
+                                      "path":  "C:\\Users\\Mark-TA\\Desktop\\AppGame\\builds\\web-release-fork\\godot.web.template_release.wasm32.nothreads.zip",
+                                      "bytes":  9854266,
+                                      "sha256":  "ED121804A7D6C2777FAB0A445C61655C6EEAFF8DD1220B64C81B4656792AE7CE",
+                                      "flavor":  "release"
+                                  }
+                  }
+}

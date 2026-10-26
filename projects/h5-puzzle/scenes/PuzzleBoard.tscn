@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/puzzle_board.gd" id="1_board"]
+
+[node name="PuzzleBoard" type="Node2D"]
+script = ExtResource("1_board")
+
+[node name="Slots" type="Node2D" parent="."]
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="LevelLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 40.0
+offset_top = 32.0
+offset_right = 400.0
+offset_bottom = 92.0
+theme_override_colors/font_color = Color(0.784314, 0.698039, 1, 1)
+theme_override_font_sizes/font_size = 44
+text = "Màn 1"
+
+[node name="MovesLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 40.0
+offset_top = 96.0
+offset_right = 400.0
+offset_bottom = 146.0
+theme_override_colors/font_color = Color(0.870588, 0.858824, 0.929412, 1)
+theme_override_font_sizes/font_size = 36
+text = "Lần kéo: 0"
+
+[node name="HintLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 40.0
+offset_top = 150.0
+offset_right = 500.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(0.650980, 0.949020, 0.552941, 1)
+theme_override_font_sizes/font_size = 36
+text = "Đúng chỗ: 0/3"
+
+[node name="SaveStateLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 40.0
+offset_top = 1216.0
+offset_right = 680.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(0.435294, 0.415686, 0.529412, 1)
+theme_override_font_sizes/font_size = 24
+text = "Chưa xác định"

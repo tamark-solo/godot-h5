@@ -1,0 +1,42 @@
+; Engine configuration file.
+
+config_version=5
+
+[application]
+
+config/name="H5 Puzzle — Xếp Hình"
+config/description="Fixture game 2: puzzle kéo-thả. Khác input/resource mix so với h5-demo."
+run/main_scene="res://scenes/PuzzleMenu.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+boot_splash/show_image=false
+
+[autoload]
+
+PuzzleState="*res://scripts/puzzle_state.gd"
+
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/size/window_width_override=405
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+pointing/emulate_mouse_from_touch=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.078431, 0.062745, 0.117647, 1)
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/h5/plugin.cfg")

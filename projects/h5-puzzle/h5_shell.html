@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<!--
+  H5 Custom HTML Shell — Godot Web export
+  Shell version: 1.2.0
+  Contract đã ĐỐI CHIẾU với template thật (bin/.web_zip/godot.html) và
+  platform/web/js/engine/{engine,config}.js:
+    - $GODOT_URL phải nạp TRƯỚC script inline (Engine phải tồn tại).
+    - Engine.getMissingFeatures() là kiểm tra năng lực CHÍNH THỨC của engine.
+    - canvas / canvasResizePolicy / onProgress / onPrintError là CONFIG KEY
+      (startGame(override) gộp vào config), không phải tham số riêng.
+    - canvasResizePolicy = 2 (Adaptive) => ENGINE tự quản backing size.
+      Shell KHÔNG được tự set canvas.width/height, nếu không sẽ đánh nhau.
+  Ngoài scope: PWA / service worker.
+-->
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>$GODOT_PROJECT_NAME</title>
+  $GODOT_HEAD_INCLUDE
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      background: $GODOT_SPLASH_COLOR; overflow: hidden;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-user-select: none; user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: none;
+    }
+    #canvas {
+      display: block; width: 100%; height: 100%;
+      touch-action: none; outline: none;
+    }
+    #status {
+      position: fixed; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 18px;
+      background: $GODOT_SPLASH_COLOR; color: #dfe6ef;
+      padding: 24px; padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      text-align: center; z-index: 10;
+    }
+    #status.hidden { display: none; }
+    #status-title { font-size: 20px; font-weight: 600; letter-spacing: .02em; }
+    #status-detail { font-size: 14px; color: #8fa0b5; max-width: 34em; line-height: 1.5; }
+    #bar-track { width: min(320px, 80vw); height: 6px; border-radius: 3px; background: #1d2534; overflow: hidden; }
+    #bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ffb020, #ffe9a8); transition: width .18s ease-out; }
+    #retry {
+      display: none; margin-top: 6px; padding: 12px 28px; font-size: 16px;
+      border: 1px solid #3a475c; border-radius: 10px; background: #1a2231; color: #dfe6ef;
+      cursor: pointer;
+    }
+    #retry:hover { background: #222c3e; }
+    #error-box {
+      display: none; max-width: min(640px, 90vw); max-height: 40vh; overflow: auto;
+      font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px;
+      color: #ff9d8a; background: #16101a; border: 1px solid #4a2b33;
+      border-radius: 8px; padding: 12px; text-align: left; white-space: pre-wrap;
+    }
+    #audio-unlock {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(6,8,14,.72); z-index: 20; cursor: pointer;
+    }
+    #audio-unlock.visible { display: flex; }
+    #audio-unlock span {
+      padding: 16px 34px; border-radius: 12px; background: #1a2231;
+      border: 1px solid #3a475c; color: #ffe9a8; font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" tabindex="0">
+    Trình duyệt không hỗ trợ thẻ canvas.
+  </canvas>
+
+  <div id="status">
+    <div id="status-title">Đang kiểm tra…</div>
+    <div id="bar-track"><div id="bar-fill"></div></div>
+    <div id="status-detail"></div>
+    <button id="retry" type="button">Thử lại</button>
+    <pre id="error-box"></pre>
+  </div>
+
+  <div id="audio-unlock"><span>Chạm để bật âm thanh</span></div>
+
+  <!-- QUAN TRONG: loader engine phai nap TRUOC script inline ben duoi. -->
+  <script src="$GODOT_URL"></script>
+  <script>
+  "use strict";
+  (function () {
+    var SHELL_VERSION = "1.2.0";
+    var GODOT_CONFIG = $GODOT_CONFIG;
+    var GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
+
+    var elStatus = document.getElementById("status");
+    var elTitle = document.getElementById("status-title");
+    var elDetail = document.getElementById("status-detail");
+    var elFill = document.getElementById("bar-fill");
+    var elRetry = document.getElementById("retry");
+    var elError = document.getElementById("error-box");
+    var elAudioUnlock = document.getElementById("audio-unlock");
+    var canvas = document.getElementById("canvas");
+
+    var engine = null;
+    var started = false;
+
+    // ---- Watchdog chong "spinner vo han" ----
+    // Yeu cau G02: khong duoc quay mai. Neu qua lau ma KHONG co tien trien
+    // (khong co callback onProgress nao), hien loi + nut Thu lai.
+    //
+    // Vi sao can: khi file .wasm bi thieu, loader cua engine co the khong
+    // bao loi ma chi dung im — nguoi dung thay vong quay bat tan.
+    // Da bat duoc bang test nhanh loi G02 (thieu index.wasm).
+    // Cho phep ghi de qua window.H5ShellConfig (dat truoc khi nap shell) hoac
+    // query param ?stallMs=... — dung cho test tu dong va cho host muon tinh chinh.
+    var _cfg = (typeof window.H5ShellConfig === "object" && window.H5ShellConfig) || {};
+    var _qp = new URLSearchParams(window.location.search);
+    var STALL_TIMEOUT_MS = parseInt(_qp.get("stallMs") || _cfg.stallTimeoutMs || 60000, 10);
+    var HARD_TIMEOUT_MS = parseInt(_qp.get("hardMs") || _cfg.hardTimeoutMs || 180000, 10);
+    var lastProgressAt = 0;
+    var bootStartedAt = 0;
+    var watchdog = null;
+
+    function noteProgress() { lastProgressAt = Date.now(); }
+
+    function startWatchdog() {
+      stopWatchdog();
+      bootStartedAt = Date.now();
+      lastProgressAt = bootStartedAt;
+      watchdog = setInterval(function () {
+        if (!started) { return; }
+        var now = Date.now();
+        var sinceProgress = now - lastProgressAt;
+        var sinceBoot = now - bootStartedAt;
+        if (sinceProgress > STALL_TIMEOUT_MS || sinceBoot > HARD_TIMEOUT_MS) {
+          stopWatchdog();
+          started = false;
+          showError(
+            "Tải engine quá lâu — có thể thiếu file",
+            "Không nhận được tiến triển trong " + Math.round(sinceProgress / 1000) + " giây. " +
+            "Kiểm tra host đã deploy đủ bộ (.js, .wasm, .pck), MIME application/wasm, " +
+            "và kết nối mạng. Bấm Thử lại sau khi sửa.",
+            "Không có tiến triển trong " + Math.round(sinceProgress / 1000) + "s " +
+            "(tổng " + Math.round(sinceBoot / 1000) + "s). Nghi thiếu index.wasm hoặc index.pck."
+          );
+        }
+      }, 2000);
+    }
+    function stopWatchdog() {
+      if (watchdog !== null) { clearInterval(watchdog); watchdog = null; }
+    }
+
+    function setStatus(title, detail, showBar) {
+      elTitle.textContent = title;
+      elDetail.textContent = detail || "";
+      elFill.parentElement.style.visibility = showBar ? "visible" : "hidden";
+    }
+    function setProgress(current, total) {
+      var pct = (total > 0) ? Math.round((current / total) * 100) : 0;
+      elFill.style.width = pct + "%";
+    }
+    function showError(title, detail, raw) {
+      elStatus.classList.remove("hidden");
+      setStatus(title, detail, false);
+      elRetry.style.display = "inline-block";
+      // LUON hien hop loi. Truoc day chi hien khi 'raw' truthy, nen nhanh
+      // "thieu index.js" (goi voi raw=null) khong hien chi tiet nao —
+      // nguoi dung chi thay tieu de. Da bat duoc bang test nhanh loi G02.
+      elError.style.display = "block";
+      elError.textContent = raw ? String(raw) : (title + (detail ? "\n" + detail : ""));
+      bridge.emit("error", { title: title, detail: detail, raw: raw ? String(raw) : "" });
+    }
+    function hideStatus() { elStatus.classList.add("hidden"); }
+
+    // ---- Bridge trung lập: không gắn cứng publisher nào ----
+    var bridge = (function () {
+      var listeners = {};
+      var api = {
+        version: SHELL_VERSION,
+        host: null, // host SDK thật gắn vào đây sau; vắng mặt vẫn boot bình thường
+        on: function (evt, fn) { (listeners[evt] = listeners[evt] || []).push(fn); return api; },
+        emit: function (evt, payload) {
+          (listeners[evt] || []).forEach(function (fn) {
+            try { fn(payload); } catch (e) { console.warn("[bridge]", evt, e); }
+          });
+          if (api.host && typeof api.host.onEvent === "function") {
+            try { api.host.onEvent(evt, payload); } catch (e) { console.warn("[bridge] host", e); }
+          }
+        },
+        // Host API mock — không có host thật thì no-op, game vẫn chạy.
+        showAdMock: function (placement) {
+          console.log("[bridge] showAdMock:", placement);
+          api.emit("ad:mock", { placement: placement });
+          return Promise.resolve({ shown: false, reason: "mock" });
+        },
+        analyticsMock: function (name, params) {
+          console.log("[bridge] analyticsMock:", name, params || {});
+          api.emit("analytics:mock", { name: name, params: params || {} });
+        },
+        saveEvent: function (state, detail) { api.emit("save", { state: state, detail: detail || "" }); },
+        ready: function () { api.emit("ready", { shellVersion: SHELL_VERSION }); },
+        pause: function () { api.emit("pause", {}); },
+        resume: function () { api.emit("resume", {}); }
+      };
+      return api;
+    })();
+    window.H5Bridge = bridge;
+
+    // ---- Kiểm tra năng lực ----
+    // Dùng Engine.getMissingFeatures() của chính engine (nguồn sự thật),
+    // thay vì tự đoán. Bổ sung kiểm tra secure context vì thông báo của
+    // engine không nói rõ nguyên nhân HTTPS.
+    function describeMissing(missing) {
+      var text = missing.join("\n");
+      var hint = "Thiếu tính năng bắt buộc:\n" + text;
+      if (!window.isSecureContext) {
+        hint += "\n\nTrang đang KHÔNG phải secure context. Engine cần HTTPS " +
+                "(hoặc localhost). Mở http://IP-LAN-PC trên điện thoại KHÔNG tương đương localhost.";
+      }
+      if (/webgl2/i.test(text)) {
+        hint += "\n\nThiếu WebGL2: bật tăng tốc phần cứng hoặc dùng thiết bị/trình duyệt hỗ trợ WebGL2.";
+      }
+      if (/threads/i.test(text)) {
+        hint += "\n\nBuild này cần thread support: host phải gửi COOP/COEP để có crossOriginIsolated.";
+      }
+      return hint;
+    }
+
+    // ---- Audio unlock sau gesture đầu tiên ----
+    var audioUnlocked = false;
+    function unlockAudio() {
+      if (audioUnlocked) { return; }
+      audioUnlocked = true;
+      elAudioUnlock.classList.remove("visible");
+      try {
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) {
+          var ctx = new Ctx();
+          if (ctx.state === "suspended") { ctx.resume(); }
+          setTimeout(function () { try { ctx.close(); } catch (e) {} }, 400);
+        }
+      } catch (e) { console.warn("[audio] unlock failed", e); }
+      bridge.emit("audio:unlocked", {});
+    }
+    ["pointerdown", "touchend", "keydown"].forEach(function (evt) {
+      window.addEventListener(evt, unlockAudio, { passive: true });
+    });
+
+    // ---- Vòng đời app -> bridge ----
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { bridge.pause(); } else { bridge.resume(); }
+    });
+    window.addEventListener("blur", function () { bridge.pause(); });
+    window.addEventListener("focus", function () { bridge.resume(); });
+
+    // ---- Boot ----
+    function boot() {
+      if (started) { return; }
+      started = true;
+      elRetry.style.display = "none";
+      elError.style.display = "none";
+      elStatus.classList.remove("hidden");
+      stopWatchdog();
+
+      if (typeof Engine === "undefined") {
+        showError("Không tải được $GODOT_URL",
+                  "File loader của engine bị thiếu hoặc host trả sai MIME. Kiểm tra host đã deploy đủ " +
+                  "(.js, .wasm, .pck) và trả đúng Content-Type.", null);
+        started = false;
+        return;
+      }
+
+      // Kiểm tra năng lực bằng API chính thức của engine.
+      var missing = [];
+      try {
+        missing = Engine.getMissingFeatures({ threads: GODOT_THREADS_ENABLED }) || [];
+      } catch (e) {
+        console.warn("[boot] getMissingFeatures failed", e);
+      }
+      if (missing.length !== 0) {
+        showError("Thiết bị/trình duyệt thiếu tính năng bắt buộc", describeMissing(missing), missing.join("\n"));
+        started = false;
+        return;
+      }
+
+      setStatus("Đang tải engine…", "Lần đầu có thể mất vài chục giây.", true);
+      setProgress(0, 1);
+      startWatchdog();
+
+      try {
+        engine = new Engine(GODOT_CONFIG);
+      } catch (e) {
+        stopWatchdog();
+        showError("Không khởi tạo được engine", "Lỗi khi tạo Engine từ cấu hình export.", e);
+        started = false;
+        return;
+      }
+
+      // startGame(override): các khóa dưới đây được GỘP VÀO CONFIG.
+      // canvasResizePolicy = 2 (Adaptive) => engine tự quản backing size;
+      // shell chỉ lo CSS, KHÔNG set canvas.width/height.
+      engine.startGame({
+        canvas: canvas,
+        canvasResizePolicy: 2,
+        onProgress: function (current, total) {
+          noteProgress(); // bao watchdog biet van con tien trien
+          setStatus("Đang tải engine…", "Lần đầu có thể mất vài chục giây.", true);
+          setProgress(current, total);
+        },
+        onPrintError: function () {
+          var msg = Array.prototype.slice.call(arguments).join(" ");
+          console.error("[godot]", msg);
+          showError("Engine gặp lỗi khi khởi động",
+                    "Xem chi tiết bên dưới. Nếu lỗi liên quan file thiếu, kiểm tra host đã deploy đủ bộ.",
+                    msg);
+        }
+      }).then(function () {
+        stopWatchdog();
+        hideStatus();
+        bridge.ready();
+        if (!audioUnlocked) { elAudioUnlock.classList.add("visible"); }
+      }).catch(function (err) {
+        stopWatchdog();
+        console.error("[boot]", err);
+        var msg = String(err && err.message ? err.message : err);
+        var hint = "Kiểm tra: file .wasm/.pck có tồn tại, MIME application/wasm, và kết nối mạng.";
+        if (/pck/i.test(msg)) { hint = "Không tải được file .pck — kiểm tra đường dẫn và MIME."; }
+        if (/wasm/i.test(msg)) { hint = "Không tải được .wasm — host phải trả MIME application/wasm."; }
+        showError("Khởi động thất bại", hint, msg);
+        started = false;
+      });
+    }
+
+    elRetry.addEventListener("click", function () { boot(); });
+    elAudioUnlock.addEventListener("click", unlockAudio);
+    boot();
+  })();
+  </script>
+</body>
+</html>

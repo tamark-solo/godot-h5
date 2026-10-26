@@ -1,0 +1,32 @@
+{
+  "url": "http://127.0.0.1:8086/index.html",
+  "measuredAt": "2026-10-26T00:35:14.190Z",
+  "coldBootMs": 5366,
+  "warmBootMs": 1236,
+  "transfer": {
+    "totalEncodedBytes": 37169654,
+    "byType": {
+      ".html": 15777,
+      ".js": 315339,
+      ".pck": 64872,
+      ".png": 5840,
+      ".wasm": 36767826
+    }
+  },
+  "frameTime": {
+    "samples": 299,
+    "p50": 16.66,
+    "p95": 16.67,
+    "p99": 16.67,
+    "min": 16.66,
+    "max": 16.67,
+    "avg": 16.67
+  },
+  "memory": {
+    "jsHeapAfterBootMB": 8.97,
+    "jsHeapAfterSoakMB": 9.32,
+    "peakMB": 10.21,
+    "growthMB": 0.35
+  },
+  "soakSeconds": 60
+}

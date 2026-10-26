@@ -1,0 +1,34 @@
+# Build output / artifacts
+builds/
+bin/
+*.exe
+*.pdb
+*.lib
+*.obj
+*.wasm
+*.zip
+*.dblite
+.sconsign*
+
+# Emscripten SDK
+third_party/emsdk/
+
+# Godot project caches
+.godot/
+*.translation
+export_presets.cfg.bak
+
+# Duong dan engine rieng tung may
+tools/engine-dir.txt
+
+# Logs / temp
+docs/logs/*.log
+*.tmp
+
+# Repo doc lap (khai bao rieng, khong commit vao workspace)
+engine/
+reference/
+third_party/
+
+# Artifact tam cua test
+docs/reports/img/_*
