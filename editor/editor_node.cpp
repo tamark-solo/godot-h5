@@ -81,6 +81,7 @@
 #include "editor/export/shader_baker_export_plugin.h"
 #include "editor/file_system/dependency_editor.h"
 #include "editor/file_system/editor_paths.h"
+#include "editor/h5/h5_embedded.h" // [H5 FORK]
 #include "editor/gui/editor_about.h"
 #include "editor/gui/editor_bottom_panel.h"
 #include "editor/gui/editor_file_dialog.h"
@@ -8362,6 +8363,10 @@ EditorNode::EditorNode() {
 	}
 
 	Resource::_get_local_scene_func = _resource_get_edited_scene;
+
+	// [H5 FORK] Single-EXE build: lay down the embedded Web export template pair
+	// before any exporter looks for templates (also covers headless --export-*).
+	H5Embedded::install_web_templates();
 
 	{
 		PortableCompressedTexture2D::set_keep_all_compressed_buffers(true);

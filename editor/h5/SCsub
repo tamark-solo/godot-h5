@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+from misc.utility.scons_hints import *
+
+Import("env")
+
+import os
+
+import h5_embed_builders
+
+# [H5 FORK] Single-EXE embedding. See h5_embed_builders.py.
+embed_dir = env.get("h5_embed_dir", "")
+embed_sources = [env.Value(embed_dir)]
+if embed_dir:
+    # Rebuild when the engine HEAD changes (the pair must match it) or any input file changes.
+    embed_sources.append(env.Value(h5_embed_builders.git_head(env.Dir("#").abspath)))
+    for dirpath, dirnames, filenames in os.walk(os.path.abspath(embed_dir)):
+        dirnames[:] = [d for d in dirnames if d != ".godot"]
+        for name in filenames:
+            embed_sources.append(env.File(os.path.join(dirpath, name)))
+
+gen = env.CommandNoCache(
+    [
+        "h5_embed_data.gen.h",
+        "h5_embed_web_debug.gen.cpp",
+        "h5_embed_web_release.gen.cpp",
+        "h5_embed_misc.gen.cpp",
+    ],
+    embed_sources,
+    env.Run(h5_embed_builders.make_h5_embed),
+)
+
+env.add_source_files(env.editor_sources, "h5_embedded.cpp")
+env.add_source_files(env.editor_sources, [t for t in gen if str(t).endswith(".cpp")])

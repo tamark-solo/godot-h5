@@ -277,6 +277,8 @@ opts.Add(
     )
 )
 opts.Add("build_profile", "Path to a file containing a feature build profile", "")
+# [H5 FORK] Single-EXE build: directory (portable layout) whose Web template pair + H5 template are embedded in the editor.
+opts.Add("h5_embed_dir", "[H5 FORK] Directory with web-templates-manifest.json, web_templates/ and h5_template/ to embed", "")
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
 opts.Add(BoolVariable("custom_modules_recursive", "Detect custom modules recursively for each specified path.", True))
 opts.Add(BoolVariable("modules_enabled_by_default", "If no, disable all modules except ones explicitly enabled", True))

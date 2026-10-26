@@ -39,6 +39,7 @@
 #include "editor/editor_node.h"
 #include "editor/editor_string_names.h"
 #include "editor/gui/editor_file_dialog.h"
+#include "editor/h5/h5_embedded.h" // [H5 FORK]
 #include "editor/settings/editor_settings.h"
 #include "editor/themes/editor_icons.h"
 #include "editor/themes/editor_scale.h"
@@ -489,24 +490,32 @@ void ProjectDialog::_install_path_selected(const String &p_path) {
 // [H5 FORK] Task E04/E05 — copy the bundled H5 template into a new project.
 //
 // Template location policy (see docs/E01-editor-entrypoints.md section 1):
-//   <dir of the editor executable>/h5_template
-// It is deliberately NOT a developer machine path and NOT a global Godot
-// install path, so a portable package works on a clean Windows machine.
+//   1. <dir of the editor executable>/h5_template, if present (developer
+//      override: edit the addon without rebuilding the editor);
+//   2. otherwise the copy embedded in the editor at build time (single EXE).
+// Neither is a developer machine path nor a global Godot install path.
 //
-// A missing template directory is an error only when the user explicitly asked
-// for an H5 project; a plain Godot project is unaffected.
+// A missing template is an error only when the user explicitly asked for an
+// H5 project; a plain Godot project is unaffected.
 Error ProjectDialog::_install_h5_template(const String &p_path) {
 	String exe_dir = OS::get_singleton()->get_executable_path().get_base_dir();
 	String template_dir = exe_dir.path_join("h5_template");
 
-	if (!DirAccess::dir_exists_absolute(template_dir)) {
-		ERR_PRINT(vformat("[H5] Template directory not found: '%s'.", template_dir));
-		return ERR_FILE_NOT_FOUND;
-	}
-
 	// Recursive copy of the template tree into the new project directory.
 	Vector<String> pending;
-	pending.push_back(template_dir);
+	if (DirAccess::dir_exists_absolute(template_dir)) {
+		pending.push_back(template_dir);
+	} else if (H5Embedded::has("h5_template.zip")) {
+		Error emb = H5Embedded::extract_h5_template(p_path);
+		if (emb != OK) {
+			ERR_PRINT(vformat("[H5] Could not extract the embedded H5 template into '%s'.", p_path));
+			return emb;
+		}
+		template_dir = vformat("<embedded %s>", H5Embedded::get_label());
+	} else {
+		ERR_PRINT(vformat("[H5] Template directory not found and no embedded template: '%s'.", template_dir));
+		return ERR_FILE_NOT_FOUND;
+	}
 
 	while (!pending.is_empty()) {
 		String current = pending[pending.size() - 1];
