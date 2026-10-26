@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_cfg")
-game_title = "Hứng Sao"
-design_resolution = Vector2i(720, 1)
+game_title = "Xếp Hình"
+design_resolution = Vector2i(720, 1280)
 require_actions = PackedStringArray("ui_accept", "ui_cancel")

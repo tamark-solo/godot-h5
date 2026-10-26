@@ -31,7 +31,8 @@ AppGame/
 
 | Khu vực | Repo | Ghi chú |
 |---|---|---|
-| `engine/godot-h5/` | Repo **riêng** (fork) | `upstream` = official Godot; `origin` = remote riêng (chờ URL) |
+| `C:\Users\Mark-TA\Documents\godot-h5` | Repo **riêng** (fork) — **checkout chính**, theo `tools/engine-dir.txt` | `upstream` = official Godot; `origin` = `github.com/tamark-solo/godot-h5` |
+| `engine/godot-h5/` | Bản trùng cùng HEAD | **Không commit ở đây**; mọi build dùng checkout chính |
 | `reference/godot/` | Repo riêng (official, partial) | Không sửa |
 | Phần còn lại của AppGame | Chưa khởi tạo repo | Nếu khởi tạo: dùng `.gitignore` ở root |
 
@@ -40,3 +41,4 @@ AppGame/
 1. **Không** commit binary/build output vào repo engine (`bin/`, `builds/`, `*.exe`, `*.wasm`, `*.zip`).
 2. Project game **độc lập** với source engine — không copy file C++ vào project.
 3. Engine repo là **checkout độc lập**, không submodule phụ thuộc object store của reference.
+4. `tools/h5_template` là **nguồn duy nhất** của addon/shell/template. Không sửa tay bản sao; dùng `tools/package/sync-template.ps1` (kiểm tra: `-Check`).

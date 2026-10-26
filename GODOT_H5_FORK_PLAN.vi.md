@@ -2,7 +2,7 @@
 
 **Phương án đã chọn:** full source riêng, nhánh phát triển riêng, Windows editor EXE build từ fork và Web export templates debug/release từ cùng revision. Official Godot chỉ là đối chứng, không thay thế deliverable của fork.
 
-**Trạng thái:** đây là kế hoạch. Chưa clone development source, cài toolchain, sửa engine hoặc build. Bản tham chiếu hiện tại sạch nhưng sparse/partial/shallow; nó không đủ để build toàn bộ sản phẩm.
+**Trạng thái (cập nhật 2026-10-26):** đang triển khai. Tiến độ thực tế và bằng chứng nằm ở [docs/BACKLOG-STATUS.md](<docs/BACKLOG-STATUS.md>): 43/61 việc ✅, gate A/C/F đạt; E/H đạt trên desktop, chờ thiết bị. Các câu "chưa triển khai" bên dưới là bối cảnh lúc lập kế hoạch, không phải trạng thái hiện tại.
 
 ## 1. Phạm vi và cách đọc backlog
 
@@ -260,4 +260,4 @@ Không hứa có cả editor và Web templates trong tuần đầu. Mục tiêu 
 
 Tài liệu build đối chiếu: [Windows](https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_windows.html), [Web](https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_web.html), [SCons buildsystem](https://docs.godotengine.org/en/stable/engine_details/development/compiling/introduction_to_the_buildsystem.html). Docs stable có thể thay đổi; full source commit đã khóa là căn cứ cuối cho flags/toolchain.
 
-Kế hoạch này thay thế lộ trình plugin-first trong [kế hoạch trước](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_PLAN.vi.md>). Giữ [bản nghiên cứu](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_STUDY.vi.md>) làm tài liệu kiến trúc. Chưa triển khai engine/addon/build/benchmark; toàn bộ 61 việc đang ở trạng thái chưa bắt đầu.
+Kế hoạch này thay thế lộ trình plugin-first trong [kế hoạch trước](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_PLAN.vi.md>). Giữ [bản nghiên cứu](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_STUDY.vi.md>) làm tài liệu kiến trúc. Trạng thái từng việc: xem [docs/BACKLOG-STATUS.md](<docs/BACKLOG-STATUS.md>). Quyết định lệch kế hoạch (server GDScript cho Browser Preview, macOS là giai đoạn J) được ghi ở cuối file đó.

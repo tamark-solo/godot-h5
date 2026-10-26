@@ -169,8 +169,10 @@ func _refresh_fields() -> void:
 		return
 	_title_edit.text = _cfg.game_title
 	_icon_edit.text = _cfg.icon_path
-	_res_x.value = _cfg.design_resolution.x
-	_res_y.value = _cfg.design_resolution.y
+	# set_value_no_signal: gán .value sẽ phát value_changed -> _commit() với ô kia
+	# còn giá trị cũ (min=1) -> từng lưu design_resolution = (720, 1).
+	_res_x.set_value_no_signal(_cfg.design_resolution.x)
+	_res_y.set_value_no_signal(_cfg.design_resolution.y)
 	_orientation.selected = maxi(0, ORIENTATIONS.find(_cfg.orientation))
 	_stretch_mode.selected = maxi(0, STRETCH_MODES.find(_cfg.stretch_mode))
 	_stretch_aspect.selected = maxi(0, STRETCH_ASPECTS.find(_cfg.stretch_aspect))
@@ -178,7 +180,7 @@ func _refresh_fields() -> void:
 	_input_profile.text = _cfg.input_profile
 	_tex_desktop.selected = maxi(0, TEX_POLICIES.find(_cfg.texture_policy_desktop))
 	_tex_mobile.selected = maxi(0, TEX_POLICIES.find(_cfg.texture_policy_mobile))
-	_block_on_error.button_pressed = _cfg.block_export_on_error
+	_block_on_error.set_pressed_no_signal(_cfg.block_export_on_error)
 
 func _create_config() -> void:
 	if _cfg == null:

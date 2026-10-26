@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="H5 Demo â€” Há»©ng Sao"
-config/description="Fixture game 2D cho pipeline Godot H5: menu â†’ gameplay â†’ káº¿t quáº£ â†’ chÆ¡i láº¡i."
+config/name="H5 Demo — Hứng Sao"
+config/description="Fixture game 2D cho pipeline Godot H5: menu → gameplay → kết quả → chơi lại."
 run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/show_image=false

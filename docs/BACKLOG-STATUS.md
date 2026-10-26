@@ -1,6 +1,6 @@
 # BACKLOG STATUS — GODOT_H5_FORK_PLAN (61 việc)
 
-> Cập nhật: 2026-10-26 07:25 · Nguồn: [GODOT_H5_FORK_PLAN.vi.md](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_FORK_PLAN.vi.md>)
+> Cập nhật: 2026-10-26 12:15 (review lại trạng thái: chỉ tính ✅ khi tiêu chí trong kế hoạch đã đạt đủ) · Nguồn: [GODOT_H5_FORK_PLAN.vi.md](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_FORK_PLAN.vi.md>)
 > Quy ước: ✅ xong (có bằng chứng) · 🔄 đã làm, chờ nghiệm thu thêm · ⏳ chờ · 🚫 chờ người dùng
 
 ## Tổng quan
@@ -11,14 +11,16 @@
 | B — Khóa toolchain Windows và Web | 7 | **6** | 1 | 0 |
 | C — Build đối chứng | 7 | **7** | 0 | 0 |
 | D — Game mẫu và baseline | 7 | 0 | 6 | 1 |
-| E — Editor EXE riêng | 8 | **8** | 0 | 0 |
+| E — Editor EXE riêng | 8 | **7** | 1 | 0 |
 | F — Cặp Web templates | 7 | **7** | 0 | 0 |
 | G — Shell, Browser Preview, mobile | 8 | **5** | 0 | 3 |
-| H — Tối ưu templates | 6 | **6** | 0 | 0 |
-| I — Đóng gói, RC, bảo trì | 5 | **2** | 1 | 2 |
-| **Tổng** | **61** | **47** | **8** | **6** |
+| H — Tối ưu templates | 6 | **4** | 2 | 0 |
+| I — Đóng gói, RC, bảo trì | 5 | **1** | 2 | 2 |
+| **Tổng** | **61** | **43** | **12** | **6** |
 
-**Gate đã đạt: A ✅ · C ✅ · E ✅ · F ✅ · H ✅** (5/9 gate)
+**Gate đã đạt: A ✅ · C ✅ · F ✅** (3/9 gate)
+
+Gate E và H: **đạt trên desktop, chờ thiết bị** (E08 chờ D07; H01/H06 cần số đo trên device floor).
 
 ---
 
@@ -30,7 +32,7 @@
 | A02 | Fingerprint | ✅ | [source-fingerprint.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/source-fingerprint.md>) |
 | A03 | Clone full source | ✅ | `engine/godot-h5` @ `ed1daf0b` |
 | A04 | Verify checkout | ✅ | shallow=false, sparse=off, filter=none, alternates=false, sạch |
-| A05 | Branch + remote | ✅ | `upstream`=official; branch `indie/h5-platform` |
+| A05 | Branch + remote | ✅ | `upstream`=official; `origin`=`github.com/tamark-solo/godot-h5`; branch `indie/h5-platform` |
 | A06 | Workspace + patch log | ✅ | [workspace-map.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/workspace-map.md>), [patch-log.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/patch-log.md>) |
 
 ## B — Toolchain
@@ -64,7 +66,7 @@
 | D06 | Save có version | 🔄 | **Chứng minh qua reload**; thiếu quota/private mode |
 | D07 | Matrix baseline | ⏳ | **Chờ thiết bị + tunnel** |
 
-## E — ✅ GATE E
+## E — Editor EXE riêng (đạt trên desktop, chờ D07)
 
 | ID | Việc | TT | Bằng chứng |
 |---|---|---|---|
@@ -74,8 +76,8 @@
 | E04 | New H5 Project | ✅ | [E08-fork-editor.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/E08-fork-editor.md>) |
 | E05 | Project H5 hợp lệ | ✅ | 39 file, addon tự bật |
 | E06 | Nạp addon lần đầu | ✅ | 1 bật/1 tắt mỗi lần, lặp 4 lần sạch |
-| E07 | Dock/config/validator | ✅ | [E07-validator-tests.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/E07-validator-tests.md>) — 3 negative test |
-| E08 | Fork editor | ✅ | `e6a2176fb`, 13:10, rebuild khớp revision |
+| E07 | Dock/config/validator | ✅ | [E07-validator-tests.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/E07-validator-tests.md>) — 3 negative test; addon v0.1.1 sửa lỗi #17 (dock ghi `design_resolution=(720, 1)`) |
+| E08 | Fork editor | 🔄 | `e6a2176fb`, 13:10, rebuild khớp revision. **Kế hoạch: nghiệm thu E08 chờ D07** |
 
 ## F — ✅ GATE F
 
@@ -106,19 +108,19 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 
 | ID | Việc | TT |
 |---|---|---|
-| H01 | Performance budgets | ✅ | [H01-performance-budgets.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/matrix/H01-performance-budgets.md>) — số đo thật: cold 2.65 s, warm 1.24 s, p95 16.7 ms, memory +0.4 MB/60 s |
+| H01 | Performance budgets | 🔄 | [H01-performance-budgets.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/matrix/H01-performance-budgets.md>) — số đo thật: cold 2.65 s, warm 1.24 s, p95 16.7 ms, memory +0.4 MB/60 s. **Chỉ Chrome desktop headless**, chưa phải device floor |
 | H02 | Game mẫu thứ hai | ✅ | [H02-second-game.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/H02-second-game.md>) — puzzle kéo-thả, **7/7 PASS**, sửa **4 lỗi thật** |
 | H03 | Phân tích module có thể bỏ | ✅ | [H03-strip-analysis.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/H03-strip-analysis.md>) |
 | H04 | Build stripped debug | ✅ | 7.22 MB (từ 9.31 MB) |
 | H05 | Build stripped release | ✅ | 7.31 MB (từ 9.40 MB) |
-| H06 | Regression + quyết định | ✅ | [H04-H06-strip-regression.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/H04-H06-strip-regression.md>) — **13/13 PASS**, **GIỮ strip** |
+| H06 | Regression + quyết định | 🔄 | [H04-H06-strip-regression.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/H04-H06-strip-regression.md>) — **13/13 PASS trên desktop**, **GIỮ strip tạm thời**; chờ chạy trên thiết bị |
 
 ## I — Đóng gói, RC, bảo trì
 
 | ID | Việc | TT | Bằng chứng |
 |---|---|---|---|
-| I01 | Portable ZIP | ✅ | 99.3 MB, VERSION.json, đầy đủ thành phần |
-| I02 | Test máy sạch | ✅ | [I01-I02-portable.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/I01-I02-portable.md>) — đường dẫn Unicode/space/ổ D, export + boot OK |
+| I01 | Portable ZIP | ✅ | Đóng lại 2026-10-26 12:10: 95.1 MB, addon v0.1.1, `VERSION.json` có hash cây template; chặn đóng gói nếu bản sao lệch nguồn |
+| I02 | Test máy sạch | 🔄 | [I01-I02-portable.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/I01-I02-portable.md>) — đường dẫn Unicode/space/ổ D, export + boot OK. **Chưa phải máy sạch thật** (máy dev có Python/MSVC); Browser Preview hiện cần PowerShell + Python ngoài gói |
 | I03 | Release hosting | ⏳ | Chờ tunnel |
 | I04 | RC matrix | ⏳ | Chờ thiết bị |
 | I05 | Maintenance + bàn giao | 🔄 | [RUNBOOK-maintenance.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/RUNBOOK-maintenance.md>) + [QUICKSTART.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/QUICKSTART.md>). **Chưa diễn tập upstream thật** (chưa có bản Godot mới hơn 4.7.2) |
@@ -143,7 +145,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | I02 clean-machine | Unicode + space + ổ D, export + boot OK |
 | **Tổng patch fork** | **6 file, +145 / −4 dòng** |
 
-## Lỗi thật đã phát hiện và sửa (16)
+## Lỗi thật đã phát hiện và sửa (17)
 
 | # | Lỗi | Mức độ |
 |---|---|---|
@@ -163,6 +165,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | 14 | `check-template-manifest.ps1` treo chờ nhập `-Label` | Trung bình |
 | 15 | `build-web.ps1` gọi `emcc` trước khi activate → lỗi ở CollectOnly | Trung bình |
 | 16 | Manifest `emcc` rỗng do `emcc` là `.ps1` | Thấp |
+| 17 | Dock H5 gán ô X trước ô Y khi nạp config → commit `design_resolution=(720, 1)` vào cả 4 `h5_config.tres`; gói portable mang validator cũ (thiếu F06), e08 mang shell cũ (thiếu G02) do copy tay | **Cao** — sửa bằng `set_value_no_signal` + `tools/package/sync-template.ps1` |
 
 ## Việc cần người dùng
 
@@ -170,14 +173,20 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 |---|---|---|
 | 1 | **Model + OS + browser version** Android và iPhone thật | B01, D07, G06–G08, I03–I04 |
 | 2 | Xác nhận tunnel cụ thể (Cloudflare/ngrok) + hostname | G06, I03 |
-| 3 | (Tuỳ chọn) URL repo riêng cho `origin` | A05 |
+| 3 | Thiết bị/máy Mac nếu làm giai đoạn J (macOS) | J |
 
 ## Việc tiếp theo (không cần người dùng)
 
 | Ưu tiên | Việc |
 |---|---|
-| 1 | H01 — đặt performance budgets từ số đo hiện có |
-| 2 | H02 — game mẫu thứ hai (puzzle drag-drop) |
-| 3 | H03–H06 — phân tích strip + build + regression |
-| 4 | I05 — diễn tập maintenance (áp upstream candidate trên branch riêng) |
-| 5 | G02 — test nhánh lỗi shell (WebGL2 tắt, thiếu file) |
+| 1 | G04b — Browser Preview trong dock H5 bằng GDScript (preflight → export mới → xác minh artifact → server `TCPServer` 127.0.0.1 → so SHA256 → mở URL); bỏ phụ thuộc PowerShell/Python để I02 chạy được trên máy sạch |
+| 2 | Chạy lại G05 (4 ca lỗi) và F06 (3 negative test) trên luồng mới, rồi đóng gói lại portable |
+| 3 | Mở dock trên GUI xác nhận lỗi #17 không tái hiện |
+| 4 | I05 — diễn tập maintenance khi có upstream candidate |
+
+## Quyết định ghi nhận (2026-10-26)
+
+- **Nguồn template duy nhất:** `tools/h5_template`. Bản sao (e08, projects, portable) chỉ cập nhật qua `tools/package/sync-template.ps1`; `assemble-portable.ps1` từ chối đóng gói nếu lệch.
+- **Checkout engine chính:** `C:\Users\Mark-TA\Documents\godot-h5` (theo `tools/engine-dir.txt`). `AppGame/engine/godot-h5` là bản trùng cùng HEAD — **không commit ở đó**.
+- **Browser Preview trong editor:** dùng server GDScript thay vì `EditorHTTPServer` (C++), vì cần chạy không Python, không tăng patch C++ fork, và dùng chung cho mọi nền tảng editor. Lệch khuyến nghị mục 8 của kế hoạch có chủ ý.
+- **macOS:** ngoài scope v0.1. Nếu làm sẽ là **giai đoạn J** riêng (build editor trên Mac/Xcode, ký/notarize, đường dẫn `h5_template` trong `.app/Contents/Resources`, kiểm tra E03 trên macOS), cần estimate riêng.

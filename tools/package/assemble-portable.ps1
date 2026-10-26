@@ -52,9 +52,19 @@ Write-Host ("  editor   : " + $exe.Name + " (" + [math]::Round($exe.Length/1MB,1
 # --- 2. H5 template (cho New H5 Project) ---
 $tplSrc = Join-Path $root "tools/h5_template"
 if (-not (Test-Path $tplSrc)) { throw "Khong tim thay h5_template: $tplSrc" }
+# Ban sao lech nguon => khong dong goi (tranh lap lai loi goi mang validator cu).
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root "tools/package/sync-template.ps1") -Check | Out-Host
+if ($LASTEXITCODE -ne 0) { throw "Ban sao h5_template lech nguon. Chay tools/package/sync-template.ps1 truoc." }
+$addonVer = (Select-String -Path (Join-Path $tplSrc "addons/h5/plugin.cfg") -Pattern '^version="(.+)"').Matches[0].Groups[1].Value
 $tplDst = Join-Path $dest "h5_template"
 robocopy $tplSrc $tplDst /E /NFL /NDL /NJH /NJS /NP | Out-Null
 $tplCount = (Get-ChildItem $tplDst -Recurse -File | Measure-Object).Count
+# Hash cua ca cay template: so sanh nhanh goi nay voi nguon ma khong can giai nen.
+$tplDstFull = (Resolve-Path $tplDst).Path.TrimEnd('\') + '\'
+$tplLines = Get-ChildItem $tplDst -Recurse -File | Sort-Object FullName | ForEach-Object {
+    $_.FullName.Substring($tplDstFull.Length).Replace('\','/') + ":" + (Get-FileHash $_.FullName -Algorithm SHA256).Hash }
+$sha = [System.Security.Cryptography.SHA256]::Create()
+$tplTreeHash = [BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(($tplLines -join "`n")))).Replace("-","")
 Write-Host "  h5_template: $tplCount file"
 
 # --- 3. Web templates ---
@@ -94,7 +104,7 @@ foreach ($f in @("scope-v0.1.md","game-spec-h5-demo.md","toolchain-lock.md")) {
 # --- 6. VERSION.json ---
 . (Join-Path $root "tools/lib/resolve-engine.ps1")
 $engDir = Resolve-H5EngineDir $root
-$sha = (& git -C $engDir rev-parse HEAD).Trim()
+$engSha = (& git -C $engDir rev-parse HEAD).Trim()
 $branch = (& git -C $engDir rev-parse --abbrev-ref HEAD).Trim()
 $editorVer = ""
 $prevEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
@@ -104,7 +114,7 @@ $ErrorActionPreference = $prevEap
 $version = [ordered]@{
     product        = $ProductName
     packagedAt     = (Get-Date -Format o)
-    engineSha      = $sha
+    engineSha      = $engSha
     engineBranch   = $branch
     editorLabel    = $EditorLabel
     editorExe      = $exe.Name
@@ -113,6 +123,8 @@ $version = [ordered]@{
     templateLabel  = $mfLabel
     webTemplates   = $webFound
     templateFiles  = $tplCount
+    addonVersion   = $addonVer
+    h5TemplateTree = $tplTreeHash
     notes          = "Portable ZIP. Khong co installer/updater/signing (ngoai scope)."
 }
 $version | ConvertTo-Json -Depth 5 | Set-Content -Path (Join-Path $dest "VERSION.json") -Encoding UTF8
@@ -129,4 +141,5 @@ Write-Host "folder : $dest"
 Write-Host "zip    : $zipPath"
 Write-Host ("size   : " + [math]::Round($zipSize/1MB,1) + " MB")
 Write-Host "editor : $editorVer"
-Write-Host "sha    : $sha"
+Write-Host "sha    : $engSha"
+Write-Host "addon  : v$addonVer  tree=$($tplTreeHash.Substring(0,16))..."
