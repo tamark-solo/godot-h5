@@ -7,7 +7,7 @@
 
 | Trường | Giá trị |
 |---|---|
-| Preset | `Web` ([export_presets.cfg](<C:/Users/Mark-TA/Desktop/AppGame/projects/h5-demo/export_presets.cfg>)) |
+| Preset | `Web` ([export_presets.cfg](<../../projects/h5-demo/export_presets.cfg>)) |
 | `custom_template/debug` | `builds/web-debug-control/godot.web.template_debug.wasm32.nothreads.zip` |
 | `custom_template/release` | `builds/web-release-control/godot.web.template_release.wasm32.nothreads.zip` |
 | `variant/thread_support` | `false` |
@@ -29,7 +29,7 @@ Cả hai đều có đủ: `index.html`, `index.js`, `index.wasm` (35.06 MB), `i
 
 ## 3. Boot test trong Chrome (CDP)
 
-Harness: [tools/test/browser-boot-test.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-boot-test.mjs>) — dùng Chrome DevTools Protocol qua WebSocket có sẵn trong Node ≥ 22, **không cần dependency ngoài**.
+Harness: [tools/test/browser-boot-test.mjs](<../../tools/test/browser-boot-test.mjs>) — dùng Chrome DevTools Protocol qua WebSocket có sẵn trong Node ≥ 22, **không cần dependency ngoài**.
 
 | Chỉ số | debug | release |
 |---|---|---|
@@ -51,11 +51,11 @@ Build configuration: Emscripten 4.0.23, single-threaded, no GDExtension support.
 
 > Dòng `single-threaded, no GDExtension support` xác nhận **đúng profile MVP** (threads=no, dlink=no).
 
-Ảnh: [boot-debug.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/boot-debug.png>), [boot-release.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/boot-release.png>)
+Ảnh: [boot-debug.png](<img/boot-debug.png>), [boot-release.png](<img/boot-release.png>)
 
 ## 4. Test tương tác (D02/D04/G03)
 
-Harness: [tools/test/browser-interact-test.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-interact-test.mjs>)
+Harness: [tools/test/browser-interact-test.mjs](<../../tools/test/browser-interact-test.mjs>)
 
 | # | Kiểm tra | Kết quả |
 |---|---|---|
@@ -72,8 +72,8 @@ Harness: [tools/test/browser-interact-test.mjs](<C:/Users/Mark-TA/Desktop/AppGam
 
 | Ảnh | Nội dung chứng minh |
 |---|---|
-| [interact-2-after-play.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/interact-2-after-play.png>) | **Gameplay chạy**: sao đang rơi, giỏ người chơi, HUD `Điểm: 0` / `Bỏ lỡ: 0/3` / `Thời gian: 43`, nút tạm dừng |
-| [interact-3-gameplay.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/interact-3-gameplay.png>) | **Màn kết quả**: `KẾT QUẢ`, `Điểm: 0`, `Điểm cao: 0`, **`Đã lưu (local)`**, nút CHƠI LẠI / VỀ MENU |
+| [interact-2-after-play.png](<img/interact-2-after-play.png>) | **Gameplay chạy**: sao đang rơi, giỏ người chơi, HUD `Điểm: 0` / `Bỏ lỡ: 0/3` / `Thời gian: 43`, nút tạm dừng |
+| [interact-3-gameplay.png](<img/interact-3-gameplay.png>) | **Màn kết quả**: `KẾT QUẢ`, `Điểm: 0`, `Điểm cao: 0`, **`Đã lưu (local)`**, nút CHƠI LẠI / VỀ MENU |
 
 → Chứng minh **toàn bộ vòng chơi menu → gameplay → kết quả** hoạt động trên web, và trạng thái save **trung thực** (hiện "Đã lưu (local)" chỉ khi read-back thành công).
 
@@ -85,7 +85,7 @@ Harness: [tools/test/browser-interact-test.mjs](<C:/Users/Mark-TA/Desktop/AppGam
 
 ## 5. Save tồn tại qua RELOAD (D06/G08) — bằng chứng cốt lõi
 
-Harness: [tools/test/browser-save-test.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-save-test.mjs>)
+Harness: [tools/test/browser-save-test.mjs](<../../tools/test/browser-save-test.mjs>)
 
 | Bước | Kết quả |
 |---|---|
@@ -96,7 +96,7 @@ Harness: [tools/test/browser-save-test.mjs](<C:/Users/Mark-TA/Desktop/AppGame/to
 | Đường dẫn save | `/userfs/godot/app_userdata/H5 Demo — Hứng Sao/h5demo_save.json` |
 | Exceptions | 0 |
 
-**Bằng chứng quyết định** — [save-3-after-reload-menu.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/save-3-after-reload-menu.png>):
+**Bằng chứng quyết định** — [save-3-after-reload-menu.png](<img/save-3-after-reload-menu.png>):
 
 | | Trước khi chơi | **Sau khi reload** |
 |---|---|---|
@@ -111,7 +111,7 @@ Export lần đầu **thất bại** và phơi ra 3 lỗi mà `--import` headles
 
 | # | Lỗi | Nguyên nhân | Sửa |
 |---|---|---|---|
-| 1 | `Member "gravity" redefined (original in native class 'Area2D')` | `star.gd` khai báo `@export var gravity` trùng property native `Area2D.gravity` ([area_2d.cpp:661](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/scene/2d/physics/area_2d.cpp#L661>)) | Đổi tên thành `fall_gravity` |
+| 1 | `Member "gravity" redefined (original in native class 'Area2D')` | `star.gd` khai báo `@export var gravity` trùng property native `Area2D.gravity` ([area_2d.cpp:661](<../../engine/godot-h5/scene/2d/physics/area_2d.cpp#L661>)) | Đổi tên thành `fall_gravity` |
 | 2 | `Invalid argument for "run()": argument 2 should be EditorInterface but is null` | `h5_validator.gd` khai báo kiểu `EditorInterface` nhưng CLI truyền `null` | Bỏ type hint: `edit = null` |
 | 3 | `Failed to load script h5_plugin.gd` | Hệ quả dây chuyền của #2 | Hết sau khi sửa #2 |
 

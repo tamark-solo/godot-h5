@@ -20,7 +20,7 @@ Ngày phân tích và cập nhật: 25/10/2026. Phạm vi người dùng đã x�
 | Custom build/template | Biên dịch editor desktop hoặc web export template, chọn module/feature, đồng bộ phiên bản | Phân phối bộ công cụ riêng và giảm runtime theo tính năng thực tế |
 | Sửa sâu C++ trong fork | Thay đổi editor, web backend, loader hoặc renderer theo nhu cầu đã đo | API plugin và tùy chọn build hiện có chưa đáp ứng |
 
-[EditorPlugin](https://docs.godotengine.org/en/stable/classes/class_editorplugin.html) hỗ trợ mở rộng editor. Hook thêm/bỏ file và tùy biến scene/resource khi export có trong [editor_export_plugin.h:98](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/editor/export/editor_export_plugin.h#L98>) và [editor_export_plugin.h:120](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/editor/export/editor_export_plugin.h#L120>). Web preset đã hỗ trợ custom template và HTML shell ở [export_plugin.cpp:370](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L370>).
+[EditorPlugin](https://docs.godotengine.org/en/stable/classes/class_editorplugin.html) hỗ trợ mở rộng editor. Hook thêm/bỏ file và tùy biến scene/resource khi export có trong [editor_export_plugin.h:98](<reference/godot/editor/export/editor_export_plugin.h#L98>) và [editor_export_plugin.h:120](<reference/godot/editor/export/editor_export_plugin.h#L120>). Web preset đã hỗ trợ custom template và HTML shell ở [export_plugin.cpp:370](<reference/godot/platform/web/export/export_plugin.cpp#L370>).
 
 ```mermaid
 flowchart TD
@@ -36,24 +36,24 @@ Godot đã cung cấp editor desktop, scene, UI, animation, physics, script edit
 
 ## 2. Nguồn tham chiếu và phạm vi đã đọc
 
-Đã tải mã nguồn từ [repository chính thức](https://github.com/godotengine/godot), tag [4.7.2-stable](https://github.com/godotengine/godot/releases/tag/4.7.2-stable), commit **ed1daf0bf001b61586d9930840f2f1394092c079**. Phiên bản cũng được đối chiếu trực tiếp trong [version.py](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/version.py#L1>).
+Đã tải mã nguồn từ [repository chính thức](https://github.com/godotengine/godot), tag [4.7.2-stable](https://github.com/godotengine/godot/releases/tag/4.7.2-stable), commit **ed1daf0bf001b61586d9930840f2f1394092c079**. Phiên bản cũng được đối chiếu trực tiếp trong [version.py](<reference/godot/version.py#L1>).
 
 Bản tham chiếu nằm trong thư mục `reference/godot`, dùng shallow clone và sparse checkout. Các vùng đã lấy gồm main, core, scene, servers, GLES3 driver, web platform, GDScript và một phần editor import/export. Phân tích tập trung vào các đoạn mã bên dưới; chưa phải audit toàn bộ engine. Đây là nghiên cứu mã nguồn tĩnh, chưa có build, game demo hoặc số đo hiệu năng.
 
 | Phần cần học | Điểm bắt đầu trong mã nguồn | Ý nghĩa với H5 |
 | --- | --- | --- |
-| Vòng lặp chính | [main.cpp:4921](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/main/main.cpp#L4921>) | Tách fixed tick, cập nhật theo frame và render; giới hạn số physics steps |
-| Node và lifecycle | [node.cpp:323](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/node.cpp#L323>) | Quy tắc enter/ready/exit và quan hệ cha con |
-| Scene scheduler | [scene_tree.cpp:639](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/scene_tree.cpp#L639>) | Hàng đợi, timer/tween, cập nhật và xóa an toàn |
-| Scene serialization | [packed_scene.cpp:155](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/resources/packed_scene.cpp#L155>) | Dữ liệu scene, instantiate và giải quyết tham chiếu |
-| Tài nguyên dùng chung | [resource_loader.cpp:750](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/core/io/resource_loader.cpp#L750>) | Cache, tái sử dụng yêu cầu và tách tài nguyên khỏi node |
-| Signal | [object.cpp:1212](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/core/object/object.cpp#L1212>) | Snapshot listener, once và deferred callback |
-| Transform và sprite | [node_2d.cpp:139](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/2d/node_2d.cpp#L139>); [sprite_2d.cpp:161](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/2d/sprite_2d.cpp#L161>) | Scene API gửi transform/lệnh vẽ xuống subsystem |
-| Batching renderer 2D | [rasterizer_canvas_gles3.cpp:576](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/drivers/gles3/rasterizer_canvas_gles3.cpp#L576>) | Gom lệnh vẽ theo trạng thái tương thích |
-| Loader trên web | [engine.js:196](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/engine/engine.js#L196>) | Boot bất đồng bộ, WASM và game pack |
-| Entry C++ trên web | [web_main.cpp:132](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/web_main.cpp#L132>) | Khởi tạo engine và đăng ký vòng lặp trình duyệt |
-| Backend WebGL | [display_server_web.cpp:1134](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/display_server_web.cpp#L1134>) | Tạo WebGL2 context, chọn GLES3 backend |
-| Export/build | [export_plugin.cpp:370](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L370>); [SConstruct:264](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/SConstruct#L264>) | Preset web, custom shell, loại tính năng không dùng |
+| Vòng lặp chính | [main.cpp:4921](<reference/godot/main/main.cpp#L4921>) | Tách fixed tick, cập nhật theo frame và render; giới hạn số physics steps |
+| Node và lifecycle | [node.cpp:323](<reference/godot/scene/main/node.cpp#L323>) | Quy tắc enter/ready/exit và quan hệ cha con |
+| Scene scheduler | [scene_tree.cpp:639](<reference/godot/scene/main/scene_tree.cpp#L639>) | Hàng đợi, timer/tween, cập nhật và xóa an toàn |
+| Scene serialization | [packed_scene.cpp:155](<reference/godot/scene/resources/packed_scene.cpp#L155>) | Dữ liệu scene, instantiate và giải quyết tham chiếu |
+| Tài nguyên dùng chung | [resource_loader.cpp:750](<reference/godot/core/io/resource_loader.cpp#L750>) | Cache, tái sử dụng yêu cầu và tách tài nguyên khỏi node |
+| Signal | [object.cpp:1212](<reference/godot/core/object/object.cpp#L1212>) | Snapshot listener, once và deferred callback |
+| Transform và sprite | [node_2d.cpp:139](<reference/godot/scene/2d/node_2d.cpp#L139>); [sprite_2d.cpp:161](<reference/godot/scene/2d/sprite_2d.cpp#L161>) | Scene API gửi transform/lệnh vẽ xuống subsystem |
+| Batching renderer 2D | [rasterizer_canvas_gles3.cpp:576](<reference/godot/drivers/gles3/rasterizer_canvas_gles3.cpp#L576>) | Gom lệnh vẽ theo trạng thái tương thích |
+| Loader trên web | [engine.js:196](<reference/godot/platform/web/js/engine/engine.js#L196>) | Boot bất đồng bộ, WASM và game pack |
+| Entry C++ trên web | [web_main.cpp:132](<reference/godot/platform/web/web_main.cpp#L132>) | Khởi tạo engine và đăng ký vòng lặp trình duyệt |
+| Backend WebGL | [display_server_web.cpp:1134](<reference/godot/platform/web/display_server_web.cpp#L1134>) | Tạo WebGL2 context, chọn GLES3 backend |
+| Export/build | [export_plugin.cpp:370](<reference/godot/platform/web/export/export_plugin.cpp#L370>); [SConstruct:264](<reference/godot/SConstruct#L264>) | Preset web, custom shell, loại tính năng không dùng |
 
 ## 3. Những quy tắc kiến trúc nên học từ Godot
 
@@ -61,7 +61,7 @@ Bản tham chiếu nằm trong thư mục `reference/godot`, dùng shallow clone
 
 Godot tổ chức hành vi bằng cây node. `Node2D` thêm transform và đẩy transform sang RenderingServer; sprite mô tả phần texture cần vẽ thay vì trực tiếp điều khiển toàn bộ GPU backend.
 
-Các quy tắc đã đọc trong [node.cpp:323](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/node.cpp#L323>):
+Các quy tắc đã đọc trong [node.cpp:323](<reference/godot/scene/main/node.cpp#L323>):
 
 - `enter_tree`: cha trước, rồi đến con.
 - `ready`: con trước, rồi đến cha; bình thường chỉ gọi lần đầu, có cơ chế yêu cầu ready lại riêng.
@@ -71,29 +71,29 @@ Trong engine riêng, nên công khai chính xác các quy tắc này và giữ `
 
 ### Scheduler, thay đổi cây và xóa node
 
-Vòng lặp ngoài ở [main.cpp:4933](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/main/main.cpp#L4933>) tính số physics steps, giới hạn catch-up ở dòng 4955, rồi chạy cập nhật theo frame và render ở dòng 5061 trở đi. Không nên buộc tốc độ simulation phụ thuộc trực tiếp vào số frame trình duyệt vẽ được.
+Vòng lặp ngoài ở [main.cpp:4933](<reference/godot/main/main.cpp#L4933>) tính số physics steps, giới hạn catch-up ở dòng 4955, rồi chạy cập nhật theo frame và render ở dòng 5061 trở đi. Không nên buộc tốc độ simulation phụ thuộc trực tiếp vào số frame trình duyệt vẽ được.
 
-Trong [scene_tree.cpp:1183](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/scene_tree.cpp#L1183>), scheduler sắp xếp danh sách khi cần, chụp bản sao danh sách trước khi duyệt và bỏ qua node đã bị remove. Một số thao tác thay đổi cây lúc node đang bị khóa sẽ bị từ chối và được khuyên dùng deferred call; Godot không tự chuyển mọi thay đổi cây thành thao tác trì hoãn.
+Trong [scene_tree.cpp:1183](<reference/godot/scene/main/scene_tree.cpp#L1183>), scheduler sắp xếp danh sách khi cần, chụp bản sao danh sách trước khi duyệt và bỏ qua node đã bị remove. Một số thao tác thay đổi cây lúc node đang bị khóa sẽ bị từ chối và được khuyên dùng deferred call; Godot không tự chuyển mọi thay đổi cây thành thao tác trì hoãn.
 
-Hàng đợi xóa được xử lý cuối cả physics phase và process phase: [physics phase:655](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/scene_tree.cpp#L655>) và [process phase:719](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/scene_tree.cpp#L719>). `queue_delete` đánh dấu và lưu instance ID ở [scene_tree.cpp:1638](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/main/scene_tree.cpp#L1638>). Không nên mô tả thành chỉ xóa một lần sau render. Đánh dấu chờ xóa cũng không tự đảm bảo node ngừng mọi callback ngay lập tức.
+Hàng đợi xóa được xử lý cuối cả physics phase và process phase: [physics phase:655](<reference/godot/scene/main/scene_tree.cpp#L655>) và [process phase:719](<reference/godot/scene/main/scene_tree.cpp#L719>). `queue_delete` đánh dấu và lưu instance ID ở [scene_tree.cpp:1638](<reference/godot/scene/main/scene_tree.cpp#L1638>). Không nên mô tả thành chỉ xóa một lần sau render. Đánh dấu chờ xóa cũng không tự đảm bảo node ngừng mọi callback ngay lập tức.
 
 Đề xuất cho bản TypeScript: mọi add/remove/reparent phát sinh trong lúc duyệt đi qua command queue FIFO; áp dụng ở ranh giới phase rồi xử lý dispose queue. Quy định rõ node chờ dispose có còn được update hay không, và kiểm tra đúng quy định đó.
 
 ### Scene asset, tài nguyên và ownership
 
-PackedScene giữ dữ liệu để dựng lại cây; việc lưu scene lọc theo ownership và thuộc tính được đánh dấu lưu, xem [packed_scene.cpp:792](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/resources/packed_scene.cpp#L792>) và [packed_scene.cpp:866](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/resources/packed_scene.cpp#L866>). `parent` dùng cho cây runtime và `owner` dùng cho phạm vi lưu scene có vai trò khác nhau.
+PackedScene giữ dữ liệu để dựng lại cây; việc lưu scene lọc theo ownership và thuộc tính được đánh dấu lưu, xem [packed_scene.cpp:792](<reference/godot/scene/resources/packed_scene.cpp#L792>) và [packed_scene.cpp:866](<reference/godot/scene/resources/packed_scene.cpp#L866>). `parent` dùng cho cây runtime và `owner` dùng cho phạm vi lưu scene có vai trò khác nhau.
 
-Quá trình instantiate có lượt giải quyết NodePath thành node sau khi dựng các đối tượng, rồi nối các signal đã lưu: [packed_scene.cpp:597](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/scene/resources/packed_scene.cpp#L597>). Đây là lý do scene format cần stable ID, schema version và danh sách trường được phép lưu.
+Quá trình instantiate có lượt giải quyết NodePath thành node sau khi dựng các đối tượng, rồi nối các signal đã lưu: [packed_scene.cpp:597](<reference/godot/scene/resources/packed_scene.cpp#L597>). Đây là lý do scene format cần stable ID, schema version và danh sách trường được phép lưu.
 
-ResourceLoader tái sử dụng load token đang chạy và tài nguyên trong cache: [resource_loader.cpp:769](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/core/io/resource_loader.cpp#L769>) và [resource_loader.cpp:800](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/core/io/resource_loader.cpp#L800>). Bản H5 nên dùng asset manifest + Promise cache để tránh tải/giải mã cùng asset nhiều lần, hỗ trợ tải theo bundle, hủy tải và báo lỗi.
+ResourceLoader tái sử dụng load token đang chạy và tài nguyên trong cache: [resource_loader.cpp:769](<reference/godot/core/io/resource_loader.cpp#L769>) và [resource_loader.cpp:800](<reference/godot/core/io/resource_loader.cpp#L800>). Bản H5 nên dùng asset manifest + Promise cache để tránh tải/giải mã cùng asset nhiều lần, hỗ trợ tải theo bundle, hủy tải và báo lỗi.
 
 JavaScript GC không thay thế việc release GPU texture, audio node, listener và timer. Cần tài nguyên có ownership/scope rõ ràng; chỉ giải phóng asset dùng chung khi không còn chủ sở hữu.
 
 ### Signal và rendering
 
-Signal ở [object.cpp:1212](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/core/object/object.cpp#L1212>) chụp snapshot callable/flags, gỡ one-shot trước khi gọi để tránh emit đệ quy, và bỏ qua callable không hợp lệ. Deferred connection được chuyển qua message queue. Bản TypeScript có thể dùng `Signal<T>` với disposer khi đăng ký và quy tắc rõ cho connect/disconnect trong lúc emit.
+Signal ở [object.cpp:1212](<reference/godot/core/object/object.cpp#L1212>) chụp snapshot callable/flags, gỡ one-shot trước khi gọi để tránh emit đệ quy, và bỏ qua callable không hợp lệ. Deferred connection được chuyển qua message queue. Bản TypeScript có thể dùng `Signal<T>` với disposer khi đăng ký và quy tắc rõ cho connect/disconnect trong lúc emit.
 
-Batching trong [renderer:602](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/drivers/gles3/rasterizer_canvas_gles3.cpp#L602>) bị tách khi clip/material thay đổi; texture, blend và trạng thái khác cũng ảnh hưởng batch, xem [renderer:924](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/drivers/gles3/rasterizer_canvas_gles3.cpp#L924>). Bài học là gom các draw command tương thích để giảm đổi trạng thái và draw call, đồng thời giữ đúng thứ tự hiển thị. Gom theo texture bất chấp z-order/transparency có thể vẽ sai.
+Batching trong [renderer:602](<reference/godot/drivers/gles3/rasterizer_canvas_gles3.cpp#L602>) bị tách khi clip/material thay đổi; texture, blend và trạng thái khác cũng ảnh hưởng batch, xem [renderer:924](<reference/godot/drivers/gles3/rasterizer_canvas_gles3.cpp#L924>). Bài học là gom các draw command tương thích để giảm đổi trạng thái và draw call, đồng thời giữ đúng thứ tự hiển thị. Gom theo texture bất chấp z-order/transparency có thể vẽ sai.
 
 Không cần mang sang bản đầu toàn bộ reflection/Variant/ClassDB, GDScript VM, thread group, scene inheritance hay renderer 3D. Một phần mã C++ Godot phụ thuộc nhiều subsystem; tách riêng vài file không tạo thành engine chạy độc lập trong trình duyệt.
 
@@ -113,17 +113,17 @@ godot_web_main → OS_Web → Main::setup → Main::start
 Emscripten main loop → Main::iteration → scene/simulation/render
 ```
 
-Căn cứ: [khởi tạo WASM/FS](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/engine/engine.js#L94>), [copyToFS/callMain](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/engine/engine.js#L163>), [startGame](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/engine/engine.js#L196>) và [entry C++](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/web_main.cpp#L132>). Godot Web là engine C++ được biên dịch sang WASM với lớp JavaScript kết nối trình duyệt.
+Căn cứ: [khởi tạo WASM/FS](<reference/godot/platform/web/js/engine/engine.js#L94>), [copyToFS/callMain](<reference/godot/platform/web/js/engine/engine.js#L163>), [startGame](<reference/godot/platform/web/js/engine/engine.js#L196>) và [entry C++](<reference/godot/platform/web/web_main.cpp#L132>). Godot Web là engine C++ được biên dịch sang WASM với lớp JavaScript kết nối trình duyệt.
 
 | Vấn đề | Điều đã xác minh và ảnh hưởng thiết kế |
 | --- | --- |
-| Đồ họa | Backend ở [display_server_web.cpp:1134](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/display_server_web.cpp#L1134>) tạo WebGL2, dùng GLES3/Compatibility; đường này không fallback WebGL1. Tài liệu hiện tại cho biết Forward+/Mobile và WebGPU chưa được hỗ trợ trong mô hình export này. |
-| Threads | Preset export mặc định tắt threads/extensions ở [export_plugin.cpp:374](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L374>), nhưng source build mặc định `threads=True` ở [SConstruct:187](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/SConstruct#L187>). Khi tự build single-thread phải chọn `threads=no` rõ ràng. |
-| Hosting/SDK | Pthreads cần SharedArrayBuffer, secure context và cross-origin isolation. Test server Godot dùng COOP `same-origin`, COEP `require-corp` ở [editor_http_server.cpp:108](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/editor_http_server.cpp#L108>). Phải kiểm SDK, iframe và tài nguyên cross-origin có đáp ứng policy; không thể kết luận mọi quảng cáo đều bị cấm. Bật extension cũng cần kiểm yêu cầu isolation theo tài liệu. |
-| Giao tiếp JavaScript | [javascript_bridge_singleton.cpp:296](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/javascript_bridge_singleton.cpp#L296>) có callback và lấy interface JavaScript. Có thể dùng custom HTML shell và bridge để tích hợp publisher SDK. |
+| Đồ họa | Backend ở [display_server_web.cpp:1134](<reference/godot/platform/web/display_server_web.cpp#L1134>) tạo WebGL2, dùng GLES3/Compatibility; đường này không fallback WebGL1. Tài liệu hiện tại cho biết Forward+/Mobile và WebGPU chưa được hỗ trợ trong mô hình export này. |
+| Threads | Preset export mặc định tắt threads/extensions ở [export_plugin.cpp:374](<reference/godot/platform/web/export/export_plugin.cpp#L374>), nhưng source build mặc định `threads=True` ở [SConstruct:187](<reference/godot/SConstruct#L187>). Khi tự build single-thread phải chọn `threads=no` rõ ràng. |
+| Hosting/SDK | Pthreads cần SharedArrayBuffer, secure context và cross-origin isolation. Test server Godot dùng COOP `same-origin`, COEP `require-corp` ở [editor_http_server.cpp:108](<reference/godot/platform/web/export/editor_http_server.cpp#L108>). Phải kiểm SDK, iframe và tài nguyên cross-origin có đáp ứng policy; không thể kết luận mọi quảng cáo đều bị cấm. Bật extension cũng cần kiểm yêu cầu isolation theo tài liệu. |
+| Giao tiếp JavaScript | [javascript_bridge_singleton.cpp:296](<reference/godot/platform/web/javascript_bridge_singleton.cpp#L296>) có callback và lấy interface JavaScript. Có thể dùng custom HTML shell và bridge để tích hợp publisher SDK. |
 | Audio | Tài liệu mô tả Web Audio Sample giúp giảm latency nhưng hạn chế effects/procedural audio; Stream cung cấp mixer đầy đủ với đánh đổi latency. Cần unlock/resume audio qua tương tác người dùng và kiểm tra iOS Safari thực tế. |
-| Lưu dữ liệu | [library_godot_os.js:133](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/libs/library_godot_os.js#L133>) mount IDBFS, đọc IndexedDB bất đồng bộ; khi lỗi có thể tiếp tục chạy mà thiếu persistence. Ghi vào filesystem trong RAM và lưu bền vững là hai trạng thái cần phân biệt. |
-| Network | Raw socket của web ở [net_socket_web.h:50](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/net_socket_web.h#L50>) trả unavailable. Thiết kế quanh HTTP/fetch, WebSocket hoặc WebRTC phù hợp; chịu CORS và chính sách browser. |
+| Lưu dữ liệu | [library_godot_os.js:133](<reference/godot/platform/web/js/libs/library_godot_os.js#L133>) mount IDBFS, đọc IndexedDB bất đồng bộ; khi lỗi có thể tiếp tục chạy mà thiếu persistence. Ghi vào filesystem trong RAM và lưu bền vững là hai trạng thái cần phân biệt. |
+| Network | Raw socket của web ở [net_socket_web.h:50](<reference/godot/platform/web/net_socket_web.h#L50>) trả unavailable. Thiết kế quanh HTTP/fetch, WebSocket hoặc WebRTC phù hợp; chịu CORS và chính sách browser. |
 | Tab ẩn/resume | Trình duyệt có thể dừng/throttle callback; phải xử lý visibility, reset/clamp thời gian khi trở lại, và network reconnect. Multiplayer cần đối chiếu thời gian/trạng thái với server. |
 | Tải game | Tối ưu cả runtime lẫn asset; đo tải lạnh/tải có cache, WASM init, decode và GPU upload. Tài liệu đề nghị stripped template, gzip/Brotli, MIME WASM phù hợp. |
 
@@ -183,7 +183,7 @@ Các phép đo cần lưu: dung lượng truyền đã nén cho runtime và ph�
 
 Các ca kiểm thử phù hợp với phần tùy biến Godot: bật/tắt plugin và mở lại project; preset chọn đúng template; scene/resource qua export giữ đúng dữ liệu; touch/mouse và resize; audio/suspend/resume; quảng cáo/pause; lỗi storage/network; và cache phiên bản mới. Prototype đầu tiên cần đi trọn vòng từ editor desktop tới game web có thể chơi, lưu tiến trình, đổi scene và quay lại. Chỉ bổ sung kiểm thử lõi engine cho các thay đổi C++ thực sự thực hiện.
 
-Đối với hướng Godot đã đề xuất, ưu tiên custom HTML shell, plugin và template giảm tính năng theo game. Các tùy chọn giảm 3D/physics/navigation/XR và build profile có trong [SConstruct:264](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/SConstruct#L264>). Bản sparse hiện tại dùng để đọc; trước khi biên dịch phải lấy lại đầy đủ cây mã nguồn và cài toolchain theo tài liệu. Lệnh sau chỉ mở rộng checkout, chưa được chạy trong nghiên cứu:
+Đối với hướng Godot đã đề xuất, ưu tiên custom HTML shell, plugin và template giảm tính năng theo game. Các tùy chọn giảm 3D/physics/navigation/XR và build profile có trong [SConstruct:264](<reference/godot/SConstruct#L264>). Bản sparse hiện tại dùng để đọc; trước khi biên dịch phải lấy lại đầy đủ cây mã nguồn và cài toolchain theo tài liệu. Lệnh sau chỉ mở rộng checkout, chưa được chạy trong nghiên cứu:
 
 ```powershell
 git -C reference/godot sparse-checkout disable
@@ -191,6 +191,6 @@ git -C reference/godot sparse-checkout disable
 
 ## 7. Giấy phép và quyết định còn cần chốt
 
-Giấy phép MIT trong [LICENSE.txt](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/LICENSE.txt#L1>) cho phép sử dụng, sửa, phân phối và bán bản phái sinh; cần giữ copyright và permission notice theo điều khoản. Thư viện bên thứ ba có notice riêng cần được giữ khi phân phối phần tương ứng. [Tài liệu license của Godot](https://docs.godotengine.org/en/stable/about/complying_with_licenses.html) giải thích thêm việc đưa notice vào sản phẩm. Giấy phép mã nguồn không đồng nghĩa quyền dùng tùy ý tên/logo/thương hiệu.
+Giấy phép MIT trong [LICENSE.txt](<reference/godot/LICENSE.txt#L1>) cho phép sử dụng, sửa, phân phối và bán bản phái sinh; cần giữ copyright và permission notice theo điều khoản. Thư viện bên thứ ba có notice riêng cần được giữ khi phân phối phần tương ứng. [Tài liệu license của Godot](https://docs.godotengine.org/en/stable/about/complying_with_licenses.html) giải thích thêm việc đưa notice vào sản phẩm. Giấy phép mã nguồn không đồng nghĩa quyền dùng tùy ý tên/logo/thương hiệu.
 
 Phạm vi đã chốt là editor desktop tạo game H5 cho browser điện thoại và máy tính. Hướng ưu tiên là tiếp tục phát triển từ Godot, dùng lại editor và runtime, bổ sung workflow H5 và tối ưu web export; mức sửa sâu/fork phụ thuộc nhu cầu thực tế. Các lựa chọn còn cần xác định khi triển khai là 2D/3D, thể loại game, browser/thiết bị, SDK và ngân sách tải. Mốc kỹ thuật đầu tiên là **một project demo GDScript được xuất từ Godot desktop, chơi được trên PC và điện thoại**, rồi bổ sung plugin H5 và custom template dựa trên kết quả đo.

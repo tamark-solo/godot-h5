@@ -16,7 +16,7 @@ Gate từng giai đoạn là Pass/Fail có chứng cứ. Không được lấy c
 
 ## 2. Repository và lệnh dự kiến
 
-Nguồn khóa: Godot 4.7.2-stable, SHA `ed1daf0bf001b61586d9930840f2f1394092c079`, đối chiếu [version.py](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/version.py#L1>). Giữ [bản source tham chiếu](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/>) nguyên trạng, tạo development checkout độc lập.
+Nguồn khóa: Godot 4.7.2-stable, SHA `ed1daf0bf001b61586d9930840f2f1394092c079`, đối chiếu [version.py](<reference/godot/version.py#L1>). Giữ [bản source tham chiếu](<reference/godot>) nguyên trạng, tạo development checkout độc lập.
 
 Cấu trúc **đề xuất**, các đường dẫn mới chưa được tạo:
 
@@ -55,9 +55,9 @@ scons platform=web target=template_debug arch=wasm32 threads=no dlink_enabled=no
 scons platform=web target=template_release arch=wasm32 threads=no dlink_enabled=no
 ```
 
-Tool minima: Python >=3.9, SCons >=4.4 theo [SConstruct](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/SConstruct#L4>); Emscripten >=4.0.0 theo [Web detector](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/detect.py#L116>). Chọn exact versions sau kiểm tra full source. Compiler/SDK Windows cụ thể chưa được xác minh từ detector Windows vì sparse checkout chưa có file đó.
+Tool minima: Python >=3.9, SCons >=4.4 theo [SConstruct](<reference/godot/SConstruct#L4>); Emscripten >=4.0.0 theo [Web detector](<reference/godot/platform/web/detect.py#L116>). Chọn exact versions sau kiểm tra full source. Compiler/SDK Windows cụ thể chưa được xác minh từ detector Windows vì sparse checkout chưa có file đó.
 
-Hai Web flavors dùng chung `bin/.web_zip` theo [emscripten_helpers.py](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/emscripten_helpers.py#L122>), nên không build song song trong một source tree. `threads=no` chỉ áp Web runtime; Windows editor giữ thread mặc định. Một số strip flags như `disable_3d` bị cấm cho editor theo [SConstruct](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/SConstruct#L1056>).
+Hai Web flavors dùng chung `bin/.web_zip` theo [emscripten_helpers.py](<reference/godot/platform/web/emscripten_helpers.py#L122>), nên không build song song trong một source tree. `threads=no` chỉ áp Web runtime; Windows editor giữ thread mặc định. Một số strip flags như `disable_3d` bị cấm cho editor theo [SConstruct](<reference/godot/SConstruct#L1056>).
 
 ## 3. Backlog công việc
 
@@ -252,12 +252,12 @@ Không hứa có cả editor và Web templates trong tuần đầu. Mục tiêu 
 
 ## 8. Những điểm source có ảnh hưởng tới thiết kế
 
-- Web exporter có sẵn custom template/shell và variant switches: [export_plugin.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L370>). Desktop VRAM compression mặc định khác mobile, cần import policy riêng.
-- Godot có Run in Browser/re-export/start-stop server tại [export_plugin.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L779>); tận dụng trước khi viết server mới. H5 commands có thể dùng public API/CLI sau spike, không giả định gọi được internal API từ GDScript.
-- Secure context vẫn cần khi threads=no: [features.js](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/engine/features.js#L90>). `http://IP-LAN-PC` trên điện thoại không tương đương localhost của PC.
-- Preview mặc định localhost/TLS off ở [export.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export.cpp#L45>); preview server gửi COOP/COEP/no-store ở [editor_http_server.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/editor_http_server.cpp#L108>). Host production cần nghiệm thu riêng.
-- Custom-template validation chủ yếu kiểm file tồn tại tại [export_plugin.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L437>); manifest+hash/flavor check là công việc bắt buộc của fork.
+- Web exporter có sẵn custom template/shell và variant switches: [export_plugin.cpp](<reference/godot/platform/web/export/export_plugin.cpp#L370>). Desktop VRAM compression mặc định khác mobile, cần import policy riêng.
+- Godot có Run in Browser/re-export/start-stop server tại [export_plugin.cpp](<reference/godot/platform/web/export/export_plugin.cpp#L779>); tận dụng trước khi viết server mới. H5 commands có thể dùng public API/CLI sau spike, không giả định gọi được internal API từ GDScript.
+- Secure context vẫn cần khi threads=no: [features.js](<reference/godot/platform/web/js/engine/features.js#L90>). `http://IP-LAN-PC` trên điện thoại không tương đương localhost của PC.
+- Preview mặc định localhost/TLS off ở [export.cpp](<reference/godot/platform/web/export/export.cpp#L45>); preview server gửi COOP/COEP/no-store ở [editor_http_server.cpp](<reference/godot/platform/web/export/editor_http_server.cpp#L108>). Host production cần nghiệm thu riêng.
+- Custom-template validation chủ yếu kiểm file tồn tại tại [export_plugin.cpp](<reference/godot/platform/web/export/export_plugin.cpp#L437>); manifest+hash/flavor check là công việc bắt buộc của fork.
 
 Tài liệu build đối chiếu: [Windows](https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_windows.html), [Web](https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_web.html), [SCons buildsystem](https://docs.godotengine.org/en/stable/engine_details/development/compiling/introduction_to_the_buildsystem.html). Docs stable có thể thay đổi; full source commit đã khóa là căn cứ cuối cho flags/toolchain.
 
-Kế hoạch này thay thế lộ trình plugin-first trong [kế hoạch trước](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_PLAN.vi.md>). Giữ [bản nghiên cứu](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_STUDY.vi.md>) làm tài liệu kiến trúc. Trạng thái từng việc: xem [docs/BACKLOG-STATUS.md](<docs/BACKLOG-STATUS.md>). Quyết định lệch kế hoạch (server GDScript cho Browser Preview, macOS là giai đoạn J) được ghi ở cuối file đó.
+Kế hoạch này thay thế lộ trình plugin-first trong [kế hoạch trước](<GODOT_H5_PLAN.vi.md>). Giữ [bản nghiên cứu](<GODOT_H5_STUDY.vi.md>) làm tài liệu kiến trúc. Trạng thái từng việc: xem [docs/BACKLOG-STATUS.md](<docs/BACKLOG-STATUS.md>). Quyết định lệch kế hoạch (server GDScript cho Browser Preview, macOS là giai đoạn J) được ghi ở cuối file đó.

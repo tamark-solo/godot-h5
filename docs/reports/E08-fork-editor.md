@@ -34,17 +34,17 @@
 |---|---|
 | Tiêu đề cửa sổ | **"Godot H5 - Project Manager"** |
 | Thanh trạng thái | `v4.7.2.stable.custom_build [45fa8fc15]` |
-| Ảnh | [e04-project-manager.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/e04-project-manager.png>) |
+| Ảnh | [e04-project-manager.png](<img/e04-project-manager.png>) |
 
 ## 3. E03 — Tách user config/cache/data (ĐÃ KIỂM CHỨNG)
 
 Chạy probe trên fork editor:
 
 ```text
-USER_DIR   = C:/Users/Mark-TA/AppData/Roaming/GodotH5/app_userdata/H5 Demo — Hứng Sao
-CONFIG_DIR = C:/Users/Mark-TA/AppData/Roaming
-DATA_DIR   = C:/Users/Mark-TA/AppData/Roaming
-CACHE_DIR  = C:/Users/Mark-TA/AppData/Local
+USER_DIR   = %APPDATA%/GodotH5/app_userdata/H5 Demo — Hứng Sao
+CONFIG_DIR = %APPDATA%
+DATA_DIR   = %APPDATA%
+CACHE_DIR  = %LOCALAPPDATA%
 ```
 
 | Kiểm tra | Kết quả |
@@ -59,7 +59,7 @@ CACHE_DIR  = C:/Users/Mark-TA/AppData/Local
 
 ### Dialog
 
-Ảnh: [e04-new-project-dialog.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/e04-new-project-dialog.png>)
+Ảnh: [e04-new-project-dialog.png](<img/e04-new-project-dialog.png>)
 
 Checkbox **"Create H5 Project (Web export ready)"** xuất hiện trong dialog New Project, **mặc định bật**, cùng hàng với "Version Control Metadata" và "Edit Now".
 

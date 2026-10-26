@@ -44,7 +44,7 @@ dlink_enabled=no
 
 Chưa strip module nào ở bước control.
 
-## 3. Toolchain (đã khóa — xem [docs/toolchain-lock.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/toolchain-lock.md>))
+## 3. Toolchain (đã khóa — xem [docs/toolchain-lock.md](<toolchain-lock.md>))
 
 | Thành phần | Version |
 |---|---|

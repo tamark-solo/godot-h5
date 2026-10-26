@@ -1,7 +1,7 @@
 # H01 — Performance budgets (từ số đo THẬT)
 
-> Ngày: 2026-10-26 · Harness: [measure-perf.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/measure-perf.mjs>)
-> Nguồn số: [perf-h5-demo-debug.json](<C:/Users/Mark-TA/Desktop/AppGame/docs/matrix/perf-h5-demo-debug.json>), [perf-h5-demo-debug-gzip.json](<C:/Users/Mark-TA/Desktop/AppGame/docs/matrix/perf-h5-demo-debug-gzip.json>)
+> Ngày: 2026-10-26 · Harness: [measure-perf.mjs](<../../tools/test/measure-perf.mjs>)
+> Nguồn số: [perf-h5-demo-debug.json](<perf-h5-demo-debug.json>), [perf-h5-demo-debug-gzip.json](<perf-h5-demo-debug-gzip.json>)
 
 ## 1. Số đo
 

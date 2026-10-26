@@ -5,14 +5,14 @@
 
 ## 1. Ràng buộc đã xác minh từ source
 
-[SConstruct:1056-1074](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/SConstruct#L1056-L1074>) — nếu là editor build mà đặt các flag sau thì **thoát 255**:
+[SConstruct:1056-1074](<../engine/godot-h5/SConstruct#L1056-L1074>) — nếu là editor build mà đặt các flag sau thì **thoát 255**:
 
 ```text
 disable_3d, disable_advanced_gui, disable_physics_2d,
 disable_physics_3d, disable_navigation_2d, disable_navigation_3d
 ```
 
-[SConstruct:1076-1092](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/SConstruct#L1076-L1092>) — `disable_3d` **kéo theo** `disable_navigation_3d`, `disable_physics_3d`, `disable_xr`.
+[SConstruct:1076-1092](<../engine/godot-h5/SConstruct#L1076-L1092>) — `disable_3d` **kéo theo** `disable_navigation_3d`, `disable_physics_3d`, `disable_xr`.
 
 → **Editor giữ nguyên full chức năng.** Chỉ template bị strip.
 

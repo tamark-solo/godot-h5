@@ -31,7 +31,7 @@ AppGame/
 
 | Khu vực | Repo | Ghi chú |
 |---|---|---|
-| `C:\Users\Mark-TA\Documents\godot-h5` | Repo **riêng** (fork) — **checkout chính**, theo `tools/engine-dir.txt` | `upstream` = official Godot; `origin` = `github.com/tamark-solo/godot-h5` |
+| `%USERPROFILE%\Documents\godot-h5` | Repo **riêng** (fork) — **checkout chính**, theo `tools/engine-dir.txt` | `upstream` = official Godot; `origin` = `github.com/tamark-solo/godot-h5` |
 | `engine/godot-h5/` | Bản trùng cùng HEAD | **Không commit ở đây**; mọi build dùng checkout chính |
 | `reference/godot/` | Repo riêng (official, partial) | Không sửa |
 | Phần còn lại của AppGame | Chưa khởi tạo repo | Nếu khởi tạo: dùng `.gitignore` ở root |

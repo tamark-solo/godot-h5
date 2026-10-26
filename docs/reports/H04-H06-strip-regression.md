@@ -34,8 +34,8 @@ Banner engine trên cả hai: `Godot H5 v4.7.2.stable.custom_build.e6a2176fb`.
 
 | Game | Harness | Kết quả |
 |---|---|---|
-| h5-demo | [browser-interact-test.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-interact-test.mjs>) | ✅ **6/6 PASS** — boot, audio unlock, bridge v1.2.0, bấm CHƠI, IndexedDB |
-| h5-puzzle | [browser-puzzle-complete.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-puzzle-complete.mjs>) | ✅ **7/7 PASS** — kéo 3/3 mảnh, đúng chỗ 3/3, **hoàn thành màn 1** |
+| h5-demo | [browser-interact-test.mjs](<../../tools/test/browser-interact-test.mjs>) | ✅ **6/6 PASS** — boot, audio unlock, bridge v1.2.0, bấm CHƠI, IndexedDB |
+| h5-puzzle | [browser-puzzle-complete.mjs](<../../tools/test/browser-puzzle-complete.mjs>) | ✅ **7/7 PASS** — kéo 3/3 mảnh, đúng chỗ 3/3, **hoàn thành màn 1** |
 
 **Tổng: 13/13 kiểm tra PASS trên engine stripped.** Đây là bằng chứng strip không phá chức năng.
 
@@ -53,7 +53,7 @@ Banner engine trên cả hai: `Godot H5 v4.7.2.stable.custom_build.e6a2176fb`.
 | **JS heap sau boot** | 9.2 MB | **7.7 MB** | **−16.3%** |
 | Memory tăng (soak) | −0.1 MB | −0.4 MB | không rò rỉ |
 
-Số đo: [perf-h5-demo-debug-gzip.json](<C:/Users/Mark-TA/Desktop/AppGame/docs/matrix/perf-h5-demo-debug-gzip.json>) vs [perf-h5-demo-stripped-gzip.json](<C:/Users/Mark-TA/Desktop/AppGame/docs/matrix/perf-h5-demo-stripped-gzip.json>)
+Số đo: [perf-h5-demo-debug-gzip.json](<../matrix/perf-h5-demo-debug-gzip.json>) vs [perf-h5-demo-stripped-gzip.json](<../matrix/perf-h5-demo-stripped-gzip.json>)
 
 ### Đọc số đo
 
@@ -71,7 +71,7 @@ Số đo: [perf-h5-demo-debug-gzip.json](<C:/Users/Mark-TA/Desktop/AppGame/docs/
 | Có lợi? | ✅ −22.3% truyền tải, −16.3% bộ nhớ |
 | Mất tính năng? | ❌ Không — 13/13 test PASS trên cả 2 game |
 | Frame time hồi quy? | ❌ Không |
-| Editor bị ảnh hưởng? | ❌ Không — strip **chỉ** áp cho template ([SConstruct:1056-1074](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/SConstruct#L1056-L1074>) chặn flag cho editor) |
+| Editor bị ảnh hưởng? | ❌ Không — strip **chỉ** áp cho template ([SConstruct:1056-1074](<../../engine/godot-h5/SConstruct#L1056-L1074>) chặn flag cho editor) |
 
 **→ Giữ strip cho template, editor vẫn full.**
 
@@ -96,7 +96,7 @@ Full templates **vẫn còn nguyên** tại `builds/web-debug-fork/` và `builds
 |---|---|
 | H01 | ✅ budgets từ số đo thật |
 | H02 | ✅ game thứ hai |
-| H03 | ✅ [phân tích strip](<C:/Users/Mark-TA/Desktop/AppGame/docs/H03-strip-analysis.md>) |
+| H03 | ✅ [phân tích strip](<../H03-strip-analysis.md>) |
 | **H04** | ✅ stripped debug, hash + manifest |
 | **H05** | ✅ stripped release, hash + manifest |
 | **H06** | ✅ **regression 13/13 PASS**, quyết định **GIỮ** |

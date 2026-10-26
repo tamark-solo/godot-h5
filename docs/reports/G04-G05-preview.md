@@ -1,6 +1,6 @@
 # G04/G05 — Browser Preview và xử lý lỗi
 
-> Ngày: 2026-10-26 · Script: [browser-preview.ps1](<C:/Users/Mark-TA/Desktop/AppGame/tools/preview/browser-preview.ps1>) + [stop-preview-server.ps1](<C:/Users/Mark-TA/Desktop/AppGame/tools/preview/stop-preview-server.ps1>)
+> Ngày: 2026-10-26 · Script: [browser-preview.ps1](<../../tools/preview/browser-preview.ps1>) + [stop-preview-server.ps1](<../../tools/preview/stop-preview-server.ps1>)
 > **Kết luận: PASS** — 7/7 ca kiểm thử, gồm 4 ca lỗi.
 
 ## 1. Luồng 5 bước
@@ -59,7 +59,7 @@ Server cũ được dựng có chủ ý với `index.html` chứa chuỗi `"BAN 
 
 | Trường | Giá trị |
 |---|---|
-| Triệu chứng | `exit -1073741819` (0xC0000005 access violation), `ERROR: Parameter "singleton" is null` tại [EditorNode::is_cmdline_mode](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/editor_node.cpp#L6617-L6620>) |
+| Triệu chứng | `exit -1073741819` (0xC0000005 access violation), `ERROR: Parameter "singleton" is null` tại [EditorNode::is_cmdline_mode](<../../engine/godot-h5/editor/editor_node.cpp#L6617-L6620>) |
 | Thời điểm | **Sau** khi `savepack` xong, build ID đã ghi, plugin đã tắt sạch |
 | Tính chất | **Không ổn định** — 6 lần chạy trực tiếp liên tiếp đều exit **0** |
 | Có phải do patch fork? | **Không.** Cả control editor và fork editor đều exit 0 khi chạy trực tiếp |

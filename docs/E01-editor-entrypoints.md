@@ -7,10 +7,10 @@
 
 | Thành phần | Vị trí | Ghi chú |
 |---|---|---|
-| Nút "New Project" (toolbar) | [project_manager.cpp:1536-1537](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/project_manager/project_manager.cpp#L1536-L1537>) | `create_btn` → `ProjectManager::_new_project` |
-| Nút "Create" khi danh sách rỗng | [project_manager.cpp:1631](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/project_manager/project_manager.cpp#L1631>) | `empty_list_create_project` |
-| Handler | [project_manager.cpp:762-765](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/project_manager/project_manager.cpp#L762-L765>) | Chỉ mở dialog: `set_mode(MODE_NEW)` + `show_dialog()` |
-| **Nơi tạo project thật** | [project_dialog.cpp:544](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/project_manager/project_dialog.cpp#L544>) `ProjectDialog::ok_pressed()` | Nhánh `MODE_NEW` ở [561-634](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/project_manager/project_dialog.cpp#L561-L634>) |
+| Nút "New Project" (toolbar) | [project_manager.cpp:1536-1537](<../engine/godot-h5/editor/project_manager/project_manager.cpp#L1536-L1537>) | `create_btn` → `ProjectManager::_new_project` |
+| Nút "Create" khi danh sách rỗng | [project_manager.cpp:1631](<../engine/godot-h5/editor/project_manager/project_manager.cpp#L1631>) | `empty_list_create_project` |
+| Handler | [project_manager.cpp:762-765](<../engine/godot-h5/editor/project_manager/project_manager.cpp#L762-L765>) | Chỉ mở dialog: `set_mode(MODE_NEW)` + `show_dialog()` |
+| **Nơi tạo project thật** | [project_dialog.cpp:544](<../engine/godot-h5/editor/project_manager/project_dialog.cpp#L544>) `ProjectDialog::ok_pressed()` | Nhánh `MODE_NEW` ở [561-634](<../engine/godot-h5/editor/project_manager/project_dialog.cpp#L561-L634>) |
 
 ### Trình tự `MODE_NEW` (đọc trực tiếp từ source)
 
@@ -39,9 +39,9 @@
 
 | Thành phần | Vị trí |
 |---|---|
-| `GODOT_VERSION_FULL_NAME` | [core/version.h:79](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/core/version.h#L79>) |
-| `GODOT_VERSION_HASH` | [core/version.h:82](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/core/version.h#L82>) |
-| About dialog | `editor/gui/editor_about.h` (include tại [editor_node.cpp:84](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/editor_node.cpp#L84>)), gọi tại [editor_node.cpp:1077](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/editor/editor_node.cpp#L1077>) |
+| `GODOT_VERSION_FULL_NAME` | [core/version.h:79](<../engine/godot-h5/core/version.h#L79>) |
+| `GODOT_VERSION_HASH` | [core/version.h:82](<../engine/godot-h5/core/version.h#L82>) |
+| About dialog | `editor/gui/editor_about.h` (include tại [editor_node.cpp:84](<../engine/godot-h5/editor/editor_node.cpp#L84>)), gọi tại [editor_node.cpp:1077](<../engine/godot-h5/editor/editor_node.cpp#L1077>) |
 | Version nguồn | `version.py` (major/minor/patch/status) |
 
 **Quyết định E02:** build ID của fork = `upstream SHA + fork revision`. Có thể sinh ở tầng build (script truyền `build_version`/`build_hash` cho SCons) thay vì sửa nhiều nơi trong C++ → giữ patch nhỏ. Tên hiển thị sửa ở `version.py` (`name`) hoặc `GODOT_VERSION_NAME`.
@@ -52,12 +52,12 @@
 
 | Hàm | Vị trí | Windows |
 |---|---|---|
-| `OS::get_godot_dir_name()` | [os.cpp:294-297](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/core/os/os.cpp#L294-L297>) | trả `GODOT_VERSION_SHORT_NAME` viết thường = **"godot"** |
-| `OS_Windows::get_config_path()` | [os_windows.cpp:2417-2421](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/os_windows.cpp#L2417-L2421>) | `%APPDATA%` |
-| `OS_Windows::get_data_path()` | [os_windows.cpp:2424-2425](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/os_windows.cpp#L2424-L2425>) | = config path |
-| `OS_Windows::get_cache_path()` | [os_windows.cpp:2428-2432](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/os_windows.cpp#L2428-L2432>) | `%LOCALAPPDATA%` |
-| `OS_Windows::get_user_data_dir(dir)` | [os_windows.cpp:2508-2509](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/os_windows.cpp#L2508-L2509>) | `data_path + "/" + dir` |
-| `OS::get_user_data_dir()` | [os.cpp:338-354](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/core/os/os.cpp#L338-L354>) | `<godot_dir>/app_userdata/<project>` |
+| `OS::get_godot_dir_name()` | [os.cpp:294-297](<../engine/godot-h5/core/os/os.cpp#L294-L297>) | trả `GODOT_VERSION_SHORT_NAME` viết thường = **"godot"** |
+| `OS_Windows::get_config_path()` | [os_windows.cpp:2417-2421](<../engine/godot-h5/platform/windows/os_windows.cpp#L2417-L2421>) | `%APPDATA%` |
+| `OS_Windows::get_data_path()` | [os_windows.cpp:2424-2425](<../engine/godot-h5/platform/windows/os_windows.cpp#L2424-L2425>) | = config path |
+| `OS_Windows::get_cache_path()` | [os_windows.cpp:2428-2432](<../engine/godot-h5/platform/windows/os_windows.cpp#L2428-L2432>) | `%LOCALAPPDATA%` |
+| `OS_Windows::get_user_data_dir(dir)` | [os_windows.cpp:2508-2509](<../engine/godot-h5/platform/windows/os_windows.cpp#L2508-L2509>) | `data_path + "/" + dir` |
+| `OS::get_user_data_dir()` | [os.cpp:338-354](<../engine/godot-h5/core/os/os.cpp#L338-L354>) | `<godot_dir>/app_userdata/<project>` |
 
 **Hệ quả hiện tại:** editor settings và user data của fork **đè lên** official Godot (`%APPDATA%\Godot\...`).
 

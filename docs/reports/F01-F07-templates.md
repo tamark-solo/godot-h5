@@ -23,15 +23,15 @@ texture: desktop=vram_compressed, mobile=lossless
 
 ## 3. F04 — Compatibility manifest
 
-[tools/build/make-template-manifest.ps1](<C:/Users/Mark-TA/Desktop/AppGame/tools/build/make-template-manifest.ps1>) → [docs/manifests/web-templates-fork.json](<C:/Users/Mark-TA/Desktop/AppGame/docs/manifests/web-templates-fork.json>)
+[tools/build/make-template-manifest.ps1](<../../tools/build/make-template-manifest.ps1>) → [docs/manifests/web-templates-fork.json](<../manifests/web-templates-fork.json>)
 
 Manifest ghi: upstream SHA, branch, dirty count, profile (platform/arch/threads/dlink/renderer/SIMD/texture policy), shell version + hash, và **SHA256 của từng template**.
 
-> **Lý do cần manifest:** Godot chỉ kiểm tra **file tồn tại** ([export_plugin.cpp:441-452](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/export/export_plugin.cpp#L441-L452>)). Manifest bổ sung đúng thứ Godot thiếu: revision, toolchain, flags, flavor, hash.
+> **Lý do cần manifest:** Godot chỉ kiểm tra **file tồn tại** ([export_plugin.cpp:441-452](<../../engine/godot-h5/platform/web/export/export_plugin.cpp#L441-L452>)). Manifest bổ sung đúng thứ Godot thiếu: revision, toolchain, flags, flavor, hash.
 
 ## 4. F06 — Chặn mismatch/missing (3 negative test PASS)
 
-[tools/build/check-template-manifest.ps1](<C:/Users/Mark-TA/Desktop/AppGame/tools/build/check-template-manifest.ps1>) — 11 kiểm tra.
+[tools/build/check-template-manifest.ps1](<../../tools/build/check-template-manifest.ps1>) — 11 kiểm tra.
 
 | # | Ca cố tình làm sai | Kết quả | Exit |
 |---|---|---|---|
@@ -46,13 +46,13 @@ Sau mỗi ca đã **khôi phục** và xác nhận manifest gốc vẫn PASS.
 
 ## 5. F05 — Nối preset tới cặp đóng gói
 
-[tools/build/set-preset-templates.ps1](<C:/Users/Mark-TA/Desktop/AppGame/tools/build/set-preset-templates.ps1>) chạy **F06 trước khi ghi**, nên preset không bao giờ bị trỏ sai.
+[tools/build/set-preset-templates.ps1](<../../tools/build/set-preset-templates.ps1>) chạy **F06 trước khi ghi**, nên preset không bao giờ bị trỏ sai.
 
-Kết quả trong [export_presets.cfg](<C:/Users/Mark-TA/Desktop/AppGame/projects/h5-demo/export_presets.cfg>):
+Kết quả trong [export_presets.cfg](<../../projects/h5-demo/export_presets.cfg>):
 
 ```ini
-custom_template/debug="C:/Users/Mark-TA/Desktop/AppGame/builds/web-debug-fork/godot.web.template_debug.wasm32.nothreads.zip"
-custom_template/release="C:/Users/Mark-TA/Desktop/AppGame/builds/web-release-fork/godot.web.template_release.wasm32.nothreads.zip"
+custom_template/debug="<AppGame>/builds/web-debug-fork/godot.web.template_debug.wasm32.nothreads.zip"
+custom_template/release="<AppGame>/builds/web-release-fork/godot.web.template_release.wasm32.nothreads.zip"
 variant/extensions_support=false
 variant/thread_support=false
 ```
@@ -87,12 +87,12 @@ Cả hai đường đều đọc `export_presets.cfg`, mà preset trỏ `custom_
 
 | Ảnh | Nội dung |
 |---|---|
-| [f07-editor-open.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/f07-editor-open.png>) | Editor mở project h5-demo, tiêu đề "MainMenu.tscn - H5 Demo — Hứng Sao - Godot H5" |
-| [f07-project-menu.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/f07-project-menu.png>) | Menu Project với **Export…** |
-| [f07-export-dialog.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/f07-export-dialog.png>) | Dialog Export: preset "Web (Runnable)", Thread Support **Off**, Extensions Support **Off**, VRAM desktop On / mobile Off |
-| [f07-export-result.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/f07-export-result.png>) | Hộp thoại lưu file với **"Export With Debug"** |
-| [f07-export-done.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/f07-export-done.png>) | Xác nhận ghi đè |
-| [f07-fork-boot.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/f07-fork-boot.png>) | Game boot trong Chrome với template FORK |
+| [f07-editor-open.png](<img/f07-editor-open.png>) | Editor mở project h5-demo, tiêu đề "MainMenu.tscn - H5 Demo — Hứng Sao - Godot H5" |
+| [f07-project-menu.png](<img/f07-project-menu.png>) | Menu Project với **Export…** |
+| [f07-export-dialog.png](<img/f07-export-dialog.png>) | Dialog Export: preset "Web (Runnable)", Thread Support **Off**, Extensions Support **Off**, VRAM desktop On / mobile Off |
+| [f07-export-result.png](<img/f07-export-result.png>) | Hộp thoại lưu file với **"Export With Debug"** |
+| [f07-export-done.png](<img/f07-export-done.png>) | Xác nhận ghi đè |
+| [f07-fork-boot.png](<img/f07-fork-boot.png>) | Game boot trong Chrome với template FORK |
 
 ## 7. Boot thật với cặp template FORK
 
@@ -119,10 +119,10 @@ Dialog Export hiển thị:
 
 ```text
 - No export template found at the expected path:
-- C:/Users/Mark-TA/AppData/Roaming/GodotH5/export_templates/4.7.2.stable/web_nothreads_debug.zip
+- %APPDATA%/GodotH5/export_templates/4.7.2.stable/web_nothreads_debug.zip
 ```
 
-**Đây KHÔNG phải lỗi của fork.** Đọc [export_plugin.cpp:437-459](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/export/export_plugin.cpp#L437-L459>):
+**Đây KHÔNG phải lỗi của fork.** Đọc [export_plugin.cpp:437-459](<../../engine/godot-h5/platform/web/export/export_plugin.cpp#L437-L459>):
 
 ```cpp
 // Look for export templates (first official, and if defined custom templates).

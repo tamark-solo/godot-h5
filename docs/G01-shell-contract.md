@@ -6,7 +6,7 @@
 
 ## 1. Danh sách placeholder (từ `export_plugin.cpp`)
 
-Bảng thay thế tại [export_plugin.cpp:169-194](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/export/export_plugin.cpp#L169-L194>):
+Bảng thay thế tại [export_plugin.cpp:169-194](<../engine/godot-h5/platform/web/export/export_plugin.cpp#L169-L194>):
 
 | Placeholder | Nguồn giá trị |
 |---|---|
@@ -23,7 +23,7 @@ Bảng thay thế tại [export_plugin.cpp:169-194](<C:/Users/Mark-TA/Desktop/Ap
 
 ## 2. Thứ tự nạp script — LỖI NGHIÊM TRỌNG của shell v1.0.0
 
-Template thật ([bin/.web_zip/godot.html:110-114](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/bin/.web_zip/godot.html#L110-L114>)):
+Template thật ([bin/.web_zip/godot.html:110-114](<../engine/godot-h5/bin/.web_zip/godot.html#L110-L114>)):
 
 ```html
 <script src="$GODOT_URL"></script>   <!-- 1. loader engine TRUOC -->
@@ -42,7 +42,7 @@ Shell v1.0.0 đặt `<script src="$GODOT_URL">` ở **cuối `<body>`, SAU** scr
 ## 3. Năng lực engine — dùng API chính thức, không tự đoán
 
 Template thật kiểm tra bằng `Engine.getMissingFeatures({threads: GODOT_THREADS_ENABLED})`
-([godot.html:163-197](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/bin/.web_zip/godot.html#L163-L197>)), export tại `engine.js:280`.
+([godot.html:163-197](<../engine/godot-h5/bin/.web_zip/godot.html#L163-L197>)), export tại `engine.js:280`.
 
 Shell v1.1.0 dùng **cùng API** làm nguồn sự thật, rồi **bổ sung** thông báo tiếng Việt có hướng dẫn cho:
 - `isSecureContext === false` → giải thích HTTPS (engine không nói rõ nguyên nhân này);
@@ -51,21 +51,21 @@ Shell v1.1.0 dùng **cùng API** làm nguồn sự thật, rồi **bổ sung** t
 
 ## 4. `startGame(override)` — các khóa là CONFIG KEY
 
-`startGame` ([engine.js:196-210](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/js/engine/engine.js#L196-L210>)) gọi `this.config.update(override)` rồi `init` + `preloadFile(pack)` + `start`.
+`startGame` ([engine.js:196-210](<../engine/godot-h5/platform/web/js/engine/engine.js#L196-L210>)) gọi `this.config.update(override)` rồi `init` + `preloadFile(pack)` + `start`.
 
 Các khóa shell dùng đều **hợp lệ**, đã xác minh trong `config.js`:
 
 | Khóa | Dòng | Ghi chú |
 |---|---|---|
-| `canvas` | [config.js:38,260,334-346](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/js/engine/config.js#L38>) | nhận `HTMLCanvasElement` |
-| `canvasResizePolicy` | [config.js:80,264](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/js/engine/config.js#L80>) | `2` = Adaptive |
-| `onProgress` | [config.js:194,257](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/js/engine/config.js#L194>) | `(current, total)` |
-| `onPrintError` | [config.js:222,255](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/js/engine/config.js#L222>) | nhận nhiều tham số |
+| `canvas` | [config.js:38,260,334-346](<../engine/godot-h5/platform/web/js/engine/config.js#L38>) | nhận `HTMLCanvasElement` |
+| `canvasResizePolicy` | [config.js:80,264](<../engine/godot-h5/platform/web/js/engine/config.js#L80>) | `2` = Adaptive |
+| `onProgress` | [config.js:194,257](<../engine/godot-h5/platform/web/js/engine/config.js#L194>) | `(current, total)` |
+| `onPrintError` | [config.js:222,255](<../engine/godot-h5/platform/web/js/engine/config.js#L222>) | nhận nhiều tham số |
 
 ## 5. LỖI THỨ HAI của v1.0.0 — shell đánh nhau với engine về canvas size
 
 `canvasResizePolicy = 2` nghĩa là **engine tự** điều chỉnh canvas cho khớp cửa sổ
-([config.js:67-80](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/js/engine/config.js#L67-L80>)).
+([config.js:67-80](<../engine/godot-h5/platform/web/js/engine/config.js#L67-L80>)).
 
 Shell v1.0.0 tự set `canvas.width/height` theo DPR trong `syncCanvasSize()` → **hai bên cùng ghi** vào backing size ⇒ nguy cơ méo/nhảy kích thước, đúng loại lỗi mà G02 phải tránh.
 
@@ -73,8 +73,8 @@ Shell v1.0.0 tự set `canvas.width/height` theo DPR trong `syncCanvasSize()` �
 
 ## 6. Ghi chú khác
 
-- `html/canvas_resize_policy` trong preset là **enum** `None,Project,Adaptive` ([export_plugin.cpp:382](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/export/export_plugin.cpp#L382>)) và được ghi vào `config["canvasResizePolicy"]` ([dòng 147](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/web/export/export_plugin.cpp#L147>)). Preset của fixture đặt `2` (Adaptive) — **khớp** với shell.
-- Template thật **tự remove** overlay `#status` khi thành công (`statusOverlay.remove()`, [godot.html:129-131](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/bin/.web_zip/godot.html#L129-L131>)). Shell v1.1.0 dùng `.hidden` để có thể hiện lại khi retry.
+- `html/canvas_resize_policy` trong preset là **enum** `None,Project,Adaptive` ([export_plugin.cpp:382](<../engine/godot-h5/platform/web/export/export_plugin.cpp#L382>)) và được ghi vào `config["canvasResizePolicy"]` ([dòng 147](<../engine/godot-h5/platform/web/export/export_plugin.cpp#L147>)). Preset của fixture đặt `2` (Adaptive) — **khớp** với shell.
+- Template thật **tự remove** overlay `#status` khi thành công (`statusOverlay.remove()`, [godot.html:129-131](<../engine/godot-h5/bin/.web_zip/godot.html#L129-L131>)). Shell v1.1.0 dùng `.hidden` để có thể hiện lại khi retry.
 
 ## 7. Trạng thái
 

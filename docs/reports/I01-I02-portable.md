@@ -18,7 +18,7 @@ GodotH5-20261026/
 └─ VERSION.json
 ```
 
-[VERSION.json](<C:/Users/Mark-TA/Desktop/AppGame/builds/portable/GodotH5-20261026/VERSION.json>) ghi: engine SHA `e6a2176fb565…`, branch `indie/h5-platform`, editor SHA256 `A52D7018…`, editor version `4.7.2.stable.custom_build.e6a2176fb`, template label `fork`, số template (2) và số file template (37).
+[VERSION.json](<../../builds/portable/GodotH5-20261026/VERSION.json>) ghi: engine SHA `e6a2176fb565…`, branch `indie/h5-platform`, editor SHA256 `A52D7018…`, editor version `4.7.2.stable.custom_build.e6a2176fb`, template label `fork`, số template (2) và số file template (37).
 
 **Không** dùng đường dẫn template trên máy developer: gói mang theo template riêng, và `h5_template` nằm **cạnh EXE** đúng như chính sách E04.
 
@@ -55,7 +55,7 @@ booted (overlay an) : true
 exceptions : 0
 ```
 
-Ảnh: [i02-pm-package.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/i02-pm-package.png>), [i02-new-project.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/i02-new-project.png>), [i02-boot.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/i02-boot.png>)
+Ảnh: [i02-pm-package.png](<img/i02-pm-package.png>), [i02-new-project.png](<img/i02-new-project.png>), [i02-boot.png](<img/i02-boot.png>)
 
 > **Ý nghĩa:** chuỗi "giải nén → mở EXE → tạo H5 project → export → chạy trên browser" hoạt động **chỉ với thành phần trong gói**, không cần Godot/Python/compiler cài sẵn, không cần đường dẫn máy developer.
 

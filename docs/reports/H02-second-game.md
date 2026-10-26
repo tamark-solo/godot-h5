@@ -1,6 +1,6 @@
 # H02 — Game mẫu thứ hai (puzzle kéo-thả)
 
-> Ngày: 2026-10-26 · Project: [projects/h5-puzzle](<C:/Users/Mark-TA/Desktop/AppGame/projects/h5-puzzle>)
+> Ngày: 2026-10-26 · Project: [projects/h5-puzzle](<../../projects/h5-puzzle>)
 > **Kết luận: PASS** — game thứ hai chạy trên web, hoàn thành màn, save hoạt động. **4 lỗi thật** được phát hiện và sửa.
 
 ## 1. Vì sao cần game thứ hai
@@ -20,7 +20,7 @@ Kế hoạch yêu cầu game 2 **khác input/scene/resource mix** để phát hi
 
 ## 2. Kiểm thử: 7/7 PASS
 
-Harness: [browser-puzzle-complete.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-puzzle-complete.mjs>)
+Harness: [browser-puzzle-complete.mjs](<../../tools/test/browser-puzzle-complete.mjs>)
 
 | # | Kiểm tra | Kết quả |
 |---|---|---|
@@ -36,9 +36,9 @@ Harness: [browser-puzzle-complete.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/t
 
 | Ảnh | Nội dung |
 |---|---|
-| [h02c-1-menu.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/h02c-1-menu.png>) | Menu: XẾP HÌNH, Màn 1 mở / Màn 2,3 khoá |
-| [h02c-2-board.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/h02c-2-board.png>) | Bàn chơi: 3 ô đích trên, 3 mảnh màu dưới |
-| [h02c-5-result.png](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/img/h02c-5-result.png>) | Kết quả: "Hoàn thành màn 1 (3 lần kéo)", "Kỷ lục: 3 lần kéo", **"Đã lưu (local)"**, nút MÀN TIẾP |
+| [h02c-1-menu.png](<img/h02c-1-menu.png>) | Menu: XẾP HÌNH, Màn 1 mở / Màn 2,3 khoá |
+| [h02c-2-board.png](<img/h02c-2-board.png>) | Bàn chơi: 3 ô đích trên, 3 mảnh màu dưới |
+| [h02c-5-result.png](<img/h02c-5-result.png>) | Kết quả: "Hoàn thành màn 1 (3 lần kéo)", "Kỷ lục: 3 lần kéo", **"Đã lưu (local)"**, nút MÀN TIẾP |
 
 ## 3. BỐN LỖI THẬT đã phát hiện và sửa
 

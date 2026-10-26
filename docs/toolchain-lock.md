@@ -19,20 +19,20 @@
 
 ## 2. B02 — Đối chiếu với detector native (ĐÃ XÁC MINH)
 
-Detector native: [platform/windows/detect.py](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/detect.py>) trong full checkout.
+Detector native: [platform/windows/detect.py](<../engine/godot-h5/platform/windows/detect.py>) trong full checkout.
 
 | Ràng buộc trong source | Dòng | Yêu cầu | Thực tế | Kết luận |
 |---|---|---:|---|---|
-| `msvc_ver == "14.5"` (Visual Studio 2026) | [190-192](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/detect.py#L190-L192>) | SCons **≥ 4.10.1** | SCons 4.11.1 | ✅ |
-| `msvc_ver == "14.3"` (VS 2022) | [187-189](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/detect.py#L187-L189>) | SCons ≥ 4.8.0 | — | n/a |
-| WinRT: `ver_parse(mssdk)[2] < 22621` | [164-169](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/detect.py#L164-L169>) | Windows SDK **≥ 10.0.22621.0** | 10.0.26100.0 | ✅ |
-| `check_mssdk_version` | [131-172](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/detect.py#L131-L172>) | SDK phải nằm trong danh sách SCons dò được | 10.0.26100.0 | ✅ |
+| `msvc_ver == "14.5"` (Visual Studio 2026) | [190-192](<../engine/godot-h5/platform/windows/detect.py#L190-L192>) | SCons **≥ 4.10.1** | SCons 4.11.1 | ✅ |
+| `msvc_ver == "14.3"` (VS 2022) | [187-189](<../engine/godot-h5/platform/windows/detect.py#L187-L189>) | SCons ≥ 4.8.0 | — | n/a |
+| WinRT: `ver_parse(mssdk)[2] < 22621` | [164-169](<../engine/godot-h5/platform/windows/detect.py#L164-L169>) | Windows SDK **≥ 10.0.22621.0** | 10.0.26100.0 | ✅ |
+| `check_mssdk_version` | [131-172](<../engine/godot-h5/platform/windows/detect.py#L131-L172>) | SDK phải nằm trong danh sách SCons dò được | 10.0.26100.0 | ✅ |
 
 **Kết luận B02:** MSVC toolset **14.51.36231** (Visual Studio 2026, `msvc_ver = "14.5"`) + Windows SDK **10.0.26100.0** + SCons **4.11.1** thỏa **mọi** ràng buộc version trong detector. Không cần `winrt=no` vì SDK đã ≥ 10.0.22621.0.
 
 ## 3. B03 — Python
 
-- Interpreter khóa: `C:\Users\Mark-TA\AppData\Local\Programs\Python\Python313\python.exe`
+- Interpreter khóa: `%LOCALAPPDATA%\Programs\Python\Python313\python.exe`
 - Gọi bằng `py -3.13` hoặc đường dẫn tuyệt đối; **không** dựa vào `python` trôi nổi trong PATH khi chạy CI.
 - Yêu cầu tối thiểu của engine: `EnsurePythonVersion(3, 9)` (SConstruct dòng 5) → 3.13.9 thỏa.
 - **Lưu ý:** emsdk kèm Python 3.13.3 riêng (`EMSDK_PYTHON`). SCons **không** cài trong Python của emsdk; build web vẫn dùng Python hệ thống đã cài SCons. Không để `EMSDK_PYTHON` ghi đè interpreter chạy SCons.

@@ -1,6 +1,6 @@
 # G02/G03 — Shell loading/error/retry và browser bridge
 
-> Ngày: 2026-10-26 · Shell **v1.2.0** · Harness: [browser-error-test.mjs](<C:/Users/Mark-TA/Desktop/AppGame/tools/test/browser-error-test.mjs>)
+> Ngày: 2026-10-26 · Shell **v1.2.0** · Harness: [browser-error-test.mjs](<../../tools/test/browser-error-test.mjs>)
 > **Kết luận: PASS** — 7/7 ca, sau khi sửa **2 lỗi thật** do chính test này phát hiện.
 
 ## 1. Yêu cầu G02 và cách kiểm chứng
@@ -85,7 +85,7 @@ if (raw) { elError.style.display = "block"; elError.textContent = String(raw); }
 | G01 | ✅ |
 | **G02** | ✅ **7/7 PASS** — 2 lỗi thật đã sửa |
 | **G03** | ✅ bridge chạy thật |
-| G04/G05 | ✅ [G04-G05-preview.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/G04-G05-preview.md>) |
+| G04/G05 | ✅ [G04-G05-preview.md](<G04-G05-preview.md>) |
 | G06–G08 | ⏳ chờ thiết bị thật + tunnel |
 
 ## 6. Giới hạn — CHƯA nghiệm thu

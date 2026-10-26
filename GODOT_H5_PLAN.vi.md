@@ -1,6 +1,6 @@
 # Kế hoạch phát triển bộ công cụ Godot H5
 
-> **Đã thay thế cho lựa chọn cách 2:** dùng [kế hoạch fork Godot chi tiết](<C:/Users/Mark-TA/Desktop/AppGame/GODOT_H5_FORK_PLAN.vi.md>) làm backlog hiện hành. Nội dung bên dưới giữ lại để tham khảo phương án dùng editor chính thức và addon; không phải lộ trình hiện tại của dự án.
+> **Đã thay thế cho lựa chọn cách 2:** dùng [kế hoạch fork Godot chi tiết](<GODOT_H5_FORK_PLAN.vi.md>) làm backlog hiện hành. Nội dung bên dưới giữ lại để tham khảo phương án dùng editor chính thức và addon; không phải lộ trình hiện tại của dự án.
 
 ## 0. Mục tiêu đã chốt và giả định lập kế hoạch
 
@@ -24,7 +24,7 @@ Các lựa chọn sau là **giả định đề xuất cho bản đầu**, chưa
 
 Một ngày công trong kế hoạch = khoảng 6 giờ tập trung. Khoảng thời gian là ước lượng cho người đã có nền Godot/GDScript và có thể đọc C++/JavaScript; không phải cam kết deadline. Nếu vừa học plugin, build C++, Emscripten và kiểm thử thiết bị, nên dự trù 4–6 tháng hoặc hơn.
 
-Mã nguồn tham chiếu là Godot 4.7.2-stable, commit ed1daf0bf001b61586d9930840f2f1394092c079; phiên bản được ghi trong [version.py](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/version.py#L1-L9>). Checkout hiện tại là sparse và chưa có sẵn Godot, SCons hoặc Emscripten trong PATH. Vì vậy không được coi việc build custom editor/template là đã hoàn thành.
+Mã nguồn tham chiếu là Godot 4.7.2-stable, commit ed1daf0bf001b61586d9930840f2f1394092c079; phiên bản được ghi trong [version.py](<reference/godot/version.py#L1-L9>). Checkout hiện tại là sparse và chưa có sẵn Godot, SCons hoặc Emscripten trong PATH. Vì vậy không được coi việc build custom editor/template là đã hoàn thành.
 
 ## 1. Kết quả sản phẩm theo từng tầng
 
@@ -89,7 +89,7 @@ Mã nguồn tham chiếu là Godot 4.7.2-stable, commit ed1daf0bf001b61586d99308
 4. Chạy bằng URL HTTP(S), không dùng file://.
 5. Kiểm tra boot, input, audio, save, đổi scene và reload.
 6. Đo cold load và warm load trên mạng cố định.
-7. Kiểm tra texture import: preset web hiện để VRAM desktop compression bật và mobile compression tắt tại [export_plugin.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L374-L377>), nên phải quyết định policy texture riêng thay vì mặc định mù.
+7. Kiểm tra texture import: preset web hiện để VRAM desktop compression bật và mobile compression tắt tại [export_plugin.cpp](<reference/godot/platform/web/export/export_plugin.cpp#L374-L377>), nên phải quyết định policy texture riêng thay vì mặc định mù.
 
 **Nghiệm thu:** baseline chạy được trên bốn nhóm môi trường: Chrome/Edge desktop, Android Chrome, iOS Safari và native editor. Không còn lỗi boot blocker chưa phân loại. Mọi số đo đều gắn với build ID và thiết bị cụ thể.
 
@@ -121,7 +121,7 @@ Mã nguồn tham chiếu là Godot 4.7.2-stable, commit ed1daf0bf001b61586d99308
 6. Dùng EditorExportPlugin để validate/customize export; không viết lại toàn bộ exporter.
 7. Khi còn là addon project-scoped, dùng template project để bootstrap. Không hứa addon tự thêm New H5 Project vào Project Manager của editor nguyên bản.
 
-Các hook export hiện có trong [editor_export_plugin.h](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/editor/export/editor_export_plugin.h#L98-L120>), còn web preset đã có custom template, custom HTML shell, resize policy và các tùy chọn threads/extensions tại [export_plugin.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L370-L395>).
+Các hook export hiện có trong [editor_export_plugin.h](<reference/godot/editor/export/editor_export_plugin.h#L98-L120>), còn web preset đã có custom template, custom HTML shell, resize policy và các tùy chọn threads/extensions tại [export_plugin.cpp](<reference/godot/platform/web/export/export_plugin.cpp#L370-L395>).
 
 **Nghiệm thu:** copy template vào thư mục mới, bật addon, cấu hình project, tạo scene, save/reopen, chạy native, validator và export web mà không phải sửa tay file cấu hình. Tắt addon vẫn mở được project hợp lệ. Một project thứ hai cũng cài addon được.
 
@@ -143,11 +143,11 @@ Các hook export hiện có trong [editor_export_plugin.h](<C:/Users/Mark-TA/Des
 4. Xử lý port bận, template thiếu, đường dẫn có dấu/khoảng trắng, output stale, server chết và editor đóng bất thường.
 5. Start/stop/re-export nhiều lần không để lại process thuộc editor.
 6. Tách Release Web Export: output folder sạch, debug/release đúng preset, không dùng kết quả debug để kết luận release.
-7. Dùng lại Run in Browser, Start HTTP Server, Stop HTTP Server và re-export đã có trong [export_plugin.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export_plugin.cpp#L779-L883>).
+7. Dùng lại Run in Browser, Start HTTP Server, Stop HTTP Server và re-export đã có trong [export_plugin.cpp](<reference/godot/platform/web/export/export_plugin.cpp#L779-L883>).
 
-**Lưu ý HTTPS:** preview mặc định dùng localhost, port 8060 và TLS tắt tại [export.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/export.cpp#L45-L52>). Điện thoại truy cập http://IP-LAN-PC không tương đương localhost và không chứng minh H5 mobile hoạt động. Godot kiểm tra secure context ngay cả khi threads=no tại [features.js](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/js/engine/features.js#L90-L101>). Cần trusted HTTPS staging hoặc chứng chỉ local được thiết bị tin cậy và hostname/SAN đúng.
+**Lưu ý HTTPS:** preview mặc định dùng localhost, port 8060 và TLS tắt tại [export.cpp](<reference/godot/platform/web/export/export.cpp#L45-L52>). Điện thoại truy cập http://IP-LAN-PC không tương đương localhost và không chứng minh H5 mobile hoạt động. Godot kiểm tra secure context ngay cả khi threads=no tại [features.js](<reference/godot/platform/web/js/engine/features.js#L90-L101>). Cần trusted HTTPS staging hoặc chứng chỉ local được thiết bị tin cậy và hostname/SAN đúng.
 
-Preview server hiện gửi COOP/COEP và no-store tại [editor_http_server.cpp](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/export/editor_http_server.cpp#L108-L115>); do đó preview pass không tự động chứng minh hosting production, iframe hoặc SDK publisher sẽ pass.
+Preview server hiện gửi COOP/COEP và no-store tại [editor_http_server.cpp](<reference/godot/platform/web/export/editor_http_server.cpp#L108-L115>); do đó preview pass không tự động chứng minh hosting production, iframe hoặc SDK publisher sẽ pass.
 
 **Nghiệm thu:** chỉnh sprite hoặc scene, bấm Browser Preview, browser hiển thị bản mới; khi cố tình làm export lỗi, browser không chạy bản trước. Stop/Start lặp lại sạch. Release artifact chạy ở một HTTPS host gần production, có đúng MIME application/wasm, path subdirectory và compression.
 
@@ -210,7 +210,7 @@ Preview server hiện gửi COOP/COEP và no-store tại [editor_http_server.cpp
 
 1. Mở rộng sparse checkout thành full source trước khi compile; checkout hiện tại thiếu các vùng editor/Windows/thirdparty/misc cần cho build hoàn chỉnh.
 2. Tạo branch/worktree phát triển từ commit khóa; không sửa trực tiếp detached reference.
-3. Cài và pin Python tối thiểu 3.9, SCons tối thiểu 4.4 theo [SConstruct](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/SConstruct#L1-L5>), MSVC/Windows SDK và Emscripten tối thiểu 4.0.0 theo [detect.py](<C:/Users/Mark-TA/Desktop/AppGame/reference/godot/platform/web/detect.py#L112-L119>).
+3. Cài và pin Python tối thiểu 3.9, SCons tối thiểu 4.4 theo [SConstruct](<reference/godot/SConstruct#L1-L5>), MSVC/Windows SDK và Emscripten tối thiểu 4.0.0 theo [detect.py](<reference/godot/platform/web/detect.py#L112-L119>).
 4. Build editor Windows nguyên bản làm control trước khi áp patch. Chuẩn bị thêm một scene kiểm thử resource/input khác game chính để bắt lỗi khi strip template; game thứ hai hoàn chỉnh hơn được dựng ở H5-10.
 5. Build full-feature web debug/release cùng commit, wasm32, Compatibility, threads=no, extensions=no, dlink=no.
 6. Không trộn JS loader, WASM, PCK và HTML shell khác revision.

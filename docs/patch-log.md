@@ -20,7 +20,7 @@ và dữ liệu người dùng của official Godot trên cùng máy.
 không đụng định dạng project/scene.
 
 **Bẫy đã phát hiện:** `OS_Windows` **override** `get_godot_dir_name()`
-([os_windows.cpp:2466](<C:/Users/Mark-TA/Desktop/AppGame/engine/godot-h5/platform/windows/os_windows.cpp#L2466>)).
+([os_windows.cpp:2466](<../engine/godot-h5/platform/windows/os_windows.cpp#L2466>)).
 Chỉ sửa lớp cơ sở `OS::get_godot_dir_name()` sẽ **không có tác dụng gì trên Windows**.
 Đã sửa **cả hai**.
 
