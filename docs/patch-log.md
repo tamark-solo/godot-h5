@@ -9,6 +9,8 @@
 | 2 | E03 | 2026-10-25 | `core/version.h` | Thêm macro `GODOT_H5_PRODUCT_DIR_NAME = "GodotH5"`. | ✅ commit |
 | 3 | E03 | 2026-10-25 | `core/os/os.cpp` | `OS::get_godot_dir_name()` trả tên sản phẩm thay vì "godot". | ✅ commit |
 | 4 | E03 | 2026-10-25 | `platform/windows/os_windows.cpp` | **Override của Windows** cũng phải sửa — đây mới là hàm thực sự chạy trên Windows. | ✅ commit |
+| 5 | E04/E05 | 2026-10-25 | `editor/project_manager/project_dialog.{h,cpp}`, `core/os/os.cpp`, `platform/windows/os_windows.cpp` | Ô "Create H5 Project" + copy `h5_template`. | ✅ `e6a2176` |
+| 6 | J01 | 2026-10-26 | `SConstruct`, `editor/SCsub`, `editor/editor_node.cpp`, `editor/project_manager/project_dialog.cpp` (+28/−11) + mới `editor/h5/` (SCsub, builder, `h5_embedded.{h,cpp}`) | Nhúng cặp Web template + H5 template vào EXE; tự cài khi khởi động. Addon không làm được: cần chạy trước khi editor tìm template và trước khi có project. | 🔄 `51762b4` trên `indie/h5-embed`, chưa merge |
 
 ## Chi tiết patch 1–4 (commit `[E02][E03]`)
 

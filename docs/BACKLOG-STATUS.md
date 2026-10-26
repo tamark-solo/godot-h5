@@ -145,7 +145,7 @@ Chi tiết: [F01-F07-templates.md](<reports/F01-F07-templates.md>)
 | I02 clean-machine | Unicode + space + ổ D, export + boot OK |
 | **Tổng patch fork** | **6 file, +145 / −4 dòng** |
 
-## Lỗi thật đã phát hiện và sửa (19)
+## Lỗi thật đã phát hiện và sửa (20)
 
 | # | Lỗi | Mức độ |
 |---|---|---|
@@ -168,6 +168,7 @@ Chi tiết: [F01-F07-templates.md](<reports/F01-F07-templates.md>)
 | 17 | Dock H5 gán ô X trước ô Y khi nạp config → commit `design_resolution=(720, 1)` vào cả 4 `h5_config.tres`; gói portable mang validator cũ (thiếu F06), e08 mang shell cũ (thiếu G02) do copy tay | **Cao** — sửa bằng `set_value_no_signal` + `tools/package/sync-template.ps1` |
 | 18 | Manifest trong gói portable ghi path tuyệt đối máy dev → F06 fail trên máy sạch | Trung bình — path tương đối + đối chiếu `VERSION.json` |
 | 19 | Build ID chứa khoảng trắng (`get_datetime_string_from_system(false, true)` dùng dấu cách thay vì `T`) | Thấp — đổi `use_space=false` |
+| 20 | (quy trình) gọi `build-web.ps1` qua `powershell -File` làm vỡ mảng `-ExtraArgs` | Thấp — `build-single-exe.ps1` gọi trong cùng process |
 
 ## Việc cần người dùng
 
@@ -175,7 +176,8 @@ Chi tiết: [F01-F07-templates.md](<reports/F01-F07-templates.md>)
 |---|---|---|
 | 1 | **Model + OS + browser version** Android và iPhone thật | B01, D07, G06–G08, I03–I04 |
 | 2 | Xác nhận tunnel cụ thể (Cloudflare/ngrok) + hostname | G06, I03 |
-| 3 | Thiết bị/máy Mac nếu làm giai đoạn J (macOS) | J |
+| 3 | Thiết bị/máy Mac nếu làm macOS | J (macOS) |
+| 4 | Thử **New H5 Project** trên editor single-EXE (`builds/editor-embed`) qua GUI | Merge `indie/h5-embed` |
 
 ## Việc tiếp theo (không cần người dùng)
 
@@ -191,4 +193,5 @@ Chi tiết: [F01-F07-templates.md](<reports/F01-F07-templates.md>)
 - **Nguồn template duy nhất:** `tools/h5_template`. Bản sao (e08, projects, portable) chỉ cập nhật qua `tools/package/sync-template.ps1`; `assemble-portable.ps1` từ chối đóng gói nếu lệch.
 - **Checkout engine chính:** `%USERPROFILE%\Documents\godot-h5` (theo `tools/engine-dir.txt`). `AppGame/engine/godot-h5` là bản trùng cùng HEAD — **không commit ở đó**.
 - **Browser Preview trong editor:** dùng server GDScript thay vì `EditorHTTPServer` (C++), vì cần chạy không Python, không tăng patch C++ fork, và dùng chung cho mọi nền tảng editor. Lệch khuyến nghị mục 8 của kế hoạch có chủ ý.
+- **J01 — Single-EXE (2026-10-26, người dùng duyệt):** cặp Web template + `h5_template` nhúng vào editor lúc build (`h5_embed_dir`), tự cài khi khởi động, có fallback thư mục `h5_template/` cạnh EXE. Thay thế gói ZIP nhiều file của I01 làm deliverable chính. Làm trên nhánh `indie/h5-embed`; merge sau khi thử New H5 Project trên GUI. Báo cáo: [J01-single-exe.md](<reports/J01-single-exe.md>).
 - **macOS:** ngoài scope v0.1. Nếu làm sẽ là **giai đoạn J** riêng (build editor trên Mac/Xcode, ký/notarize, đường dẫn `h5_template` trong `.app/Contents/Resources`, kiểm tra E03 trên macOS), cần estimate riêng.

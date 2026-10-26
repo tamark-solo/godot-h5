@@ -4,6 +4,8 @@
 
 **Trạng thái (cập nhật 2026-10-26):** đang triển khai. Tiến độ thực tế và bằng chứng nằm ở [docs/BACKLOG-STATUS.md](<docs/BACKLOG-STATUS.md>): 43/61 việc ✅, gate A/C/F đạt; E/H đạt trên desktop, chờ thiết bị. Các câu "chưa triển khai" bên dưới là bối cảnh lúc lập kế hoạch, không phải trạng thái hiện tại.
 
+**Thay đổi phạm vi J01 (2026-10-26):** deliverable chính chuyển từ portable ZIP nhiều file sang **một EXE** có nhúng sẵn cặp Web template và H5 template (xem [J01-single-exe.md](<docs/reports/J01-single-exe.md>)). Đổi lại: sửa addon/shell phải build lại editor; patch fork thêm `editor/h5/` và 4 chỗ móc.
+
 ## 1. Phạm vi và cách đọc backlog
 
 Giả định bản đầu: Windows x64, game 2D GDScript, Compatibility/WebGL2, web single-thread/no-GDExtension, portable ZIP. Target PC Chrome/Edge, Android Chrome và iPhone Safari thật qua HTTPS. Các giả định này thu hẹp effort, chưa phải cam kết hỗ trợ mọi thiết bị.
