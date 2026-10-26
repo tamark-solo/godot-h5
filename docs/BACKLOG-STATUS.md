@@ -98,7 +98,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | G01 | HTML loader contract | ✅ | [G01-shell-contract.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/G01-shell-contract.md>) — phát hiện 2 lỗi nghiêm trọng |
 | G02 | Loading/error/retry | ✅ | shell **v1.2.0** — **7/7 test nhánh lỗi PASS**; sửa 2 lỗi thật (spinner vô hạn, hộp lỗi ẩn) |
 | G03 | Bridge/mock adapter | ✅ | `H5Bridge` v1.2.0 chạy thật |
-| G04 | 3 luồng preview | ✅ | [G04-G05-preview.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/G04-G05-preview.md>) |
+| G04 | 3 luồng preview | ✅ | [G04-G05-preview.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/G04-G05-preview.md>) + Browser Preview trong dock (addon v0.2.0, không cần PowerShell/Python): [G04-dock-preview.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/reports/G04-dock-preview.md>) |
 | G05 | Test lỗi + cleanup | ✅ | **7/7 ca PASS** (gồm 4 ca lỗi) |
 | G06 | HTTPS/release host | ⏳ | **Chờ tunnel + thiết bị** |
 | G07 | Input/viewport/audio | ⏳ | **Chờ thiết bị** |
@@ -145,7 +145,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | I02 clean-machine | Unicode + space + ổ D, export + boot OK |
 | **Tổng patch fork** | **6 file, +145 / −4 dòng** |
 
-## Lỗi thật đã phát hiện và sửa (18)
+## Lỗi thật đã phát hiện và sửa (19)
 
 | # | Lỗi | Mức độ |
 |---|---|---|
@@ -167,6 +167,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | 16 | Manifest `emcc` rỗng do `emcc` là `.ps1` | Thấp |
 | 17 | Dock H5 gán ô X trước ô Y khi nạp config → commit `design_resolution=(720, 1)` vào cả 4 `h5_config.tres`; gói portable mang validator cũ (thiếu F06), e08 mang shell cũ (thiếu G02) do copy tay | **Cao** — sửa bằng `set_value_no_signal` + `tools/package/sync-template.ps1` |
 | 18 | Manifest trong gói portable ghi path tuyệt đối máy dev → F06 fail trên máy sạch | Trung bình — path tương đối + đối chiếu `VERSION.json` |
+| 19 | Build ID chứa khoảng trắng (`get_datetime_string_from_system(false, true)` dùng dấu cách thay vì `T`) | Thấp — đổi `use_space=false` |
 
 ## Việc cần người dùng
 

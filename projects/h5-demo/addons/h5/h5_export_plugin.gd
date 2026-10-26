@@ -72,7 +72,7 @@ func _export_begin(features: PackedStringArray, is_debug: bool, path: String, _f
 	if engine_hash.length() > 12:
 		engine_hash = engine_hash.substr(0, 12)
 	var flavor := "debug" if is_debug else "release"
-	_build_id = "%s-%s-%s" % [engine_hash, flavor, Time.get_datetime_string_from_system(false, true).replace(":", "").replace("-", "").replace("T", "-")]
+	_build_id = "%s-%s-%s" % [engine_hash, flavor, Time.get_datetime_string_from_system(false, false).replace(":", "").replace("-", "").replace("T", "-")]
 
 	var issues := _run_validation()
 	var errs := _error_count()

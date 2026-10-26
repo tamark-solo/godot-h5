@@ -4,6 +4,7 @@ extends VBoxContainer
 
 const H5ConfigScript := preload("res://addons/h5/h5_config.gd")
 const H5ValidatorScript := preload("res://addons/h5/h5_validator.gd")
+const H5PreviewRunnerScript := preload("res://addons/h5/h5_preview_runner.gd")
 
 const CONFIG_PATH := "res://h5_config.tres"
 
@@ -25,6 +26,16 @@ var _block_on_error: CheckBox
 var _results: RichTextLabel
 var _status: Label
 
+# --- Browser Preview (G04 trong dock) ---
+var _runner: Node
+var _pv_btn: Button
+var _pv_stop_btn: Button
+var _pv_copy_btn: Button
+var _pv_open_btn: Button
+var _pv_port: SpinBox
+var _pv_status: Label
+var _pv_log: RichTextLabel
+
 const ORIENTATIONS := ["portrait", "landscape", "any"]
 const STRETCH_MODES := ["canvas_items", "viewport", "disabled"]
 const STRETCH_ASPECTS := ["expand", "keep", "keep_width", "keep_height"]
@@ -38,6 +49,12 @@ func _ready() -> void:
 	_undo = EditorInterface.get_editor_undo_redo()
 	_build_ui()
 	_reload_config()
+	_build_preview_ui()
+
+## Tắt plugin / đóng editor: dừng server + export đang chạy (G05: không sót process).
+func _exit_tree() -> void:
+	if _runner != null:
+		_runner.shutdown()
 
 # ------------------------------------------------------------------ UI
 func _build_ui() -> void:
@@ -251,3 +268,106 @@ func _render_issues(issues: Array[Dictionary]) -> void:
 		if not str(i.get("hint", "")).is_empty():
 			_results.append_text("   [color=#9aa7b8]→ %s[/color]\n" % i.hint)
 		_results.append_text("\n")
+
+# ------------------------------------------------------- browser preview
+func _build_preview_ui() -> void:
+	_runner = H5PreviewRunnerScript.new()
+	_runner.name = "PreviewRunner"
+	add_child(_runner)
+	var es := EditorInterface.get_editor_settings()
+	_runner.port = int(es.get_project_metadata("h5", "preview_port", H5PreviewRunnerScript.DEFAULT_PORT))
+
+	add_child(HSeparator.new())
+	var title := Label.new()
+	title.text = "Browser Preview"
+	title.add_theme_font_size_override("font_size", 14)
+	add_child(title)
+
+	var row1 := HBoxContainer.new()
+	add_child(row1)
+	_pv_btn = Button.new()
+	_pv_btn.text = "Preview trên trình duyệt"
+	_pv_btn.tooltip_text = "Lưu scene → preflight → export debug MỚI → serve 127.0.0.1 → xác minh → mở trình duyệt."
+	_pv_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_pv_btn.pressed.connect(func() -> void: _runner.start(true))
+	row1.add_child(_pv_btn)
+	var port_lbl := Label.new()
+	port_lbl.text = "Port"
+	row1.add_child(port_lbl)
+	_pv_port = SpinBox.new()
+	_pv_port.min_value = 1024
+	_pv_port.max_value = 65535
+	_pv_port.step = 1
+	_pv_port.set_value_no_signal(_runner.port)
+	_pv_port.value_changed.connect(_on_port_changed)
+	row1.add_child(_pv_port)
+
+	var row2 := HBoxContainer.new()
+	add_child(row2)
+	_pv_open_btn = Button.new()
+	_pv_open_btn.text = "Mở lại"
+	_pv_open_btn.pressed.connect(func() -> void: OS.shell_open(_runner.last_url))
+	row2.add_child(_pv_open_btn)
+	_pv_copy_btn = Button.new()
+	_pv_copy_btn.text = "Copy URL"
+	_pv_copy_btn.pressed.connect(func() -> void: DisplayServer.clipboard_set(_runner.last_url))
+	row2.add_child(_pv_copy_btn)
+	_pv_stop_btn = Button.new()
+	_pv_stop_btn.text = "Dừng server"
+	_pv_stop_btn.pressed.connect(func() -> void: _runner.stop_server())
+	row2.add_child(_pv_stop_btn)
+
+	_pv_status = Label.new()
+	_pv_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	add_child(_pv_status)
+
+	_pv_log = RichTextLabel.new()
+	_pv_log.bbcode_enabled = true
+	_pv_log.scroll_following = true
+	_pv_log.custom_minimum_size = Vector2(0, 140)
+	_pv_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	add_child(_pv_log)
+
+	_runner.state_changed.connect(_refresh_preview_ui)
+	_runner.log_message.connect(_on_preview_log)
+	_runner.finished.connect(func(_ok: bool, _m: String) -> void: _refresh_preview_ui())
+	_refresh_preview_ui()
+
+func _on_port_changed(v: float) -> void:
+	if _runner.server.is_running():
+		_runner.stop_server()
+	_runner.port = int(v)
+	EditorInterface.get_editor_settings().set_project_metadata("h5", "preview_port", int(v))
+	_refresh_preview_ui()
+
+func _on_preview_log(text: String, level: String) -> void:
+	var color := "#c8d0dc"
+	if level == "error":
+		color = "#ff8a7a"
+	elif level == "warning":
+		color = "#ffd479"
+	_pv_log.append_text("[color=%s]%s[/color]\n" % [color, text.replace("[", "[lb]")])
+
+func _refresh_preview_ui() -> void:
+	if _runner == null or _pv_btn == null:
+		return
+	var busy: bool = _runner.is_busy()
+	var serving: bool = _runner.server.is_running()
+	var has_url: bool = serving and not _runner.last_url.is_empty()
+	_pv_btn.disabled = busy
+	_pv_btn.text = "Đang chạy…" if busy else ("Re-export + mở lại" if serving else "Preview trên trình duyệt")
+	_pv_port.editable = not busy
+	_pv_stop_btn.disabled = busy or not serving
+	_pv_open_btn.disabled = busy or not has_url
+	_pv_copy_btn.disabled = busy or not has_url
+	if busy:
+		_pv_status.text = "Đang export…"
+	elif has_url:
+		var s := "Đang phục vụ %s" % _runner.last_url
+		if not _runner.last_build_id.is_empty():
+			s += "\nbuild: %s" % _runner.last_build_id
+		if _runner.stale:
+			s += "\n⚠ Bản preview đã cũ (có file sửa trong lúc export) — bấm Re-export."
+		_pv_status.text = s
+	else:
+		_pv_status.text = "Server đang tắt (port %d)." % _runner.port
