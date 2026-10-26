@@ -40,3 +40,9 @@ Thư mục app `Ứng dụng H5` (Unicode + space), `APPDATA`/`LOCALAPPDATA` tr�
 - Sửa addon/shell/template → **phải build lại editor** (~12 phút) để bản phát hành có bản mới. Lúc phát triển đặt `h5_template/` cạnh EXE để dùng ngay.
 - Sửa C++ engine → build lại cả 3 bước (~23 phút), vì manifest phải khớp HEAD mới.
 - Lỗi #20 (quy trình): gọi `build-web.ps1` qua `powershell -File` làm vỡ mảng `-ExtraArgs`. Script mới gọi trong cùng process.
+
+## Nghiệm thu GUI (người dùng, 2026-10-26 14:45)
+
+- Copy riêng `godot.windows.editor.x86_64.exe` (bản embed) vào thư mục trống, mở, tạo project mới với "Create H5 Project": ✅ project tạo từ **template nhúng**, dock H5 hiện ở cột phải.
+- Bấm "Preview trên trình duyệt" trong dock: ✅ game chạy trên trình duyệt.
+- Đã merge `indie/h5-embed` vào `indie/h5-platform` (fast-forward, `51762b4`) và push cả hai nhánh.
