@@ -62,4 +62,17 @@ Mọi ca đều trả **exit code 1** và `PREFLIGHT: FAIL`. Sau test đã **kh�
 
 ## 6. Trạng thái
 
-✅ E07 validator: **đã kiểm chứng bằng negative test** (phần `_get_export_option_warning` + dock UI vẫn cần một lượt GUI).
+✅ E07 validator: **đã kiểm chứng bằng negative test** (phần `_get_export_option_warning` + dock UI vẫn cần một lượt GUI thao tác tay).
+
+## 7. Lỗi #17 — dock ghi `design_resolution=(720, 1)` (2026-10-26)
+
+- **Nguyên nhân:** `_refresh_fields()` gán `_res_x.value` trước `_res_y.value`; `value_changed` của ô X gọi `_commit()` khi ô Y còn giá trị min=1 → config bị ghi đè thành 720×1. Lỗi đã lọt vào cả 4 `h5_config.tres`.
+- **Sửa (addon v0.1.1):** dùng `set_value_no_signal` / `set_pressed_no_signal` khi nạp config; dữ liệu sai đã khôi phục về 720×1280.
+- **Regression test (fork editor e08, headless `--editor --quit-after 600`, bản sao h5-demo):**
+
+| Bản dock | Trước | Sau khi dock nạp config |
+|---|---|---|
+| Cũ (`88916f8`) | 720×1280 | **720×1** — tái hiện lỗi |
+| Mới (v0.1.1) | 720×1280 | **720×1280** |
+
+Plugin bật/tắt sạch, không có SCRIPT ERROR. Chưa thao tác tay trên GUI.

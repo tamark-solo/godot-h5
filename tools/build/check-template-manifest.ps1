@@ -23,7 +23,10 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 . (Join-Path $root "tools/lib/resolve-engine.ps1")
-if ([string]::IsNullOrEmpty($EngineDir)) { $EngineDir = Resolve-H5EngineDir $root }
+if ([string]::IsNullOrEmpty($EngineDir)) {
+    # Tren may sach khong co engine checkout: de trong, se doi chieu VERSION.json cua goi.
+    try { $EngineDir = Resolve-H5EngineDir $root } catch { $EngineDir = "" }
+}
 Set-Location $root
 
 if ([string]::IsNullOrEmpty($ManifestPath)) {
@@ -50,9 +53,19 @@ Ok "manifest: $ManifestPath"
 
 $mf = Get-Content $ManifestPath -Raw | ConvertFrom-Json
 
-# 1. Source SHA phai khop engine checkout
-$sha = (& git -C $EngineDir rev-parse HEAD).Trim()
-if ($mf.source.upstreamSha -ne $sha) {
+$mfDir = Split-Path -Parent (Resolve-Path $ManifestPath).Path
+
+# 1. Source SHA phai khop engine checkout; khong co checkout -> VERSION.json canh manifest (goi portable)
+$sha = ""
+if ($EngineDir) {
+    $sha = (& git -C $EngineDir rev-parse HEAD).Trim()
+} else {
+    $verFile = Join-Path $mfDir "VERSION.json"
+    if (Test-Path $verFile) { $sha = [string](Get-Content $verFile -Raw | ConvertFrom-Json).engineSha }
+}
+if ([string]::IsNullOrEmpty($sha)) {
+    Fail "khong xac dinh duoc engine SHA (khong co engine checkout va khong co VERSION.json)"
+} elseif ($mf.source.upstreamSha -ne $sha) {
     Fail "source SHA lech: manifest=$($mf.source.upstreamSha) engine=$sha"
 } else {
     Ok "source SHA khop: $sha"
@@ -70,11 +83,14 @@ foreach ($flavor in @("debug","release")) {
 
     if ($t.flavor -ne $flavor) { Fail "$flavor : truong flavor khai bao '$($t.flavor)'" } else { Ok "$flavor : flavor dung" }
 
-    if (-not (Test-Path $t.path)) {
-        Fail "$flavor : file khong ton tai: $($t.path)"
+    # Path tuong doi (goi portable) duoc tinh tu thu muc chua manifest, khong tu cwd.
+    $tp = [string]$t.path
+    if (-not [System.IO.Path]::IsPathRooted($tp)) { $tp = Join-Path $mfDir $tp }
+    if (-not (Test-Path $tp)) {
+        Fail "$flavor : file khong ton tai: $tp"
         continue
     }
-    $actual = (Get-FileHash $t.path -Algorithm SHA256).Hash
+    $actual = (Get-FileHash $tp -Algorithm SHA256).Hash
     if ($actual -ne $t.sha256) {
         Fail "$flavor : SHA256 KHONG khop (file bi doi/thay the)"
         Write-Host ("         manifest = " + $t.sha256)

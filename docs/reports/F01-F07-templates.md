@@ -163,6 +163,21 @@ Boot test đầu tiên trả **404** dù server của ta đang chạy. Nguyên n
 
 **Gate F: ĐẠT.**
 
+### Chạy lại F06 trên gói portable (2026-10-26, sau lỗi #18)
+
+Lỗi #18: `web-templates-manifest.json` trong gói ghi `templates.*.path` **tuyệt đối trên máy dev** và `engineDir=engine\godot-h5` → trên máy sạch `check-template-manifest.ps1` báo "file không tồn tại". Sửa:
+- `assemble-portable.ps1` ghi path **tương đối** (`web_templates/<flavor>/<file>`), xóa `engineDir`, và tự kiểm path tồn tại trước khi đóng ZIP.
+- `check-template-manifest.ps1` tính path tương đối từ thư mục chứa manifest; không có engine checkout thì đối chiếu `engineSha` trong `VERSION.json` của gói.
+
+Test: giải nén ZIP mới vào thư mục tạm, chạy **không** có engine checkout (giả lập máy sạch):
+
+| Ca | Kết quả | Exit |
+|---|---|---|
+| Đối chứng | PASS (SHA khớp qua VERSION.json) | 0 |
+| Thêm 1 byte vào ZIP debug | `SHA256 KHONG khop` | **1** |
+| Debug và release cùng file | `CUNG SHA256` | **1** |
+| `upstreamSha=deadbeef…` | `source SHA lech` | **1** |
+
 ## 11. Giới hạn — CHƯA nghiệm thu
 
 - Toàn bộ test trên **Chrome desktop headless**. Chưa chứng minh gì cho mobile.

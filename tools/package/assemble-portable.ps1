@@ -87,8 +87,21 @@ foreach ($flavor in @("debug","release")) {
 $mfLabel = if ($TemplateLabel) { $TemplateLabel } else { "control" }
 $mfSrc = Join-Path $root ("docs/manifests/web-templates-" + $mfLabel + ".json")
 if (Test-Path $mfSrc) {
-    Copy-Item $mfSrc (Join-Path $dest "web-templates-manifest.json") -Force
-    Write-Host "  manifest : web-templates-$mfLabel.json"
+    # Loi #18: manifest goc ghi duong dan TUYET DOI tren may dev -> tren may sach
+    # check-template-manifest.ps1 bao "file khong ton tai". Ban trong goi ghi path
+    # TUONG DOI so voi chinh file manifest, va bo engineDir (khong co nghia ngoai may dev).
+    $mfObj = Get-Content $mfSrc -Raw | ConvertFrom-Json
+    foreach ($fl in @("debug","release")) {
+        $t = $mfObj.templates.$fl
+        if ($null -ne $t) { $t.path = "web_templates/" + $fl + "/" + $t.file }
+    }
+    $mfObj.source.engineDir = ""
+    $mfObj | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $dest "web-templates-manifest.json") -Encoding UTF8
+    foreach ($fl in @("debug","release")) {
+        $p = Join-Path $dest $mfObj.templates.$fl.path
+        if (-not (Test-Path $p)) { throw "Manifest trong goi tro toi file khong co: $p" }
+    }
+    Write-Host "  manifest : web-templates-$mfLabel.json (path tuong doi trong goi)"
 } else {
     Write-Warning "  thieu manifest: $mfSrc"
 }

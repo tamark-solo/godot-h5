@@ -145,7 +145,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | I02 clean-machine | Unicode + space + ổ D, export + boot OK |
 | **Tổng patch fork** | **6 file, +145 / −4 dòng** |
 
-## Lỗi thật đã phát hiện và sửa (17)
+## Lỗi thật đã phát hiện và sửa (18)
 
 | # | Lỗi | Mức độ |
 |---|---|---|
@@ -166,6 +166,7 @@ Chi tiết: [F01-F07-templates.md](<C:/Users/Mark-TA/Desktop/AppGame/docs/report
 | 15 | `build-web.ps1` gọi `emcc` trước khi activate → lỗi ở CollectOnly | Trung bình |
 | 16 | Manifest `emcc` rỗng do `emcc` là `.ps1` | Thấp |
 | 17 | Dock H5 gán ô X trước ô Y khi nạp config → commit `design_resolution=(720, 1)` vào cả 4 `h5_config.tres`; gói portable mang validator cũ (thiếu F06), e08 mang shell cũ (thiếu G02) do copy tay | **Cao** — sửa bằng `set_value_no_signal` + `tools/package/sync-template.ps1` |
+| 18 | Manifest trong gói portable ghi path tuyệt đối máy dev → F06 fail trên máy sạch | Trung bình — path tương đối + đối chiếu `VERSION.json` |
 
 ## Việc cần người dùng
 
